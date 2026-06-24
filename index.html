@@ -1,0 +1,1012 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Condominio Agorà - Gestione 2026 (Offline)</title>
+<style id="page-style">@page{size:A4 portrait;margin:14mm;}</style>
+<style>
+/* ===== RESET / BASE ===== */
+*{box-sizing:border-box;margin:0;padding:0;}
+:root{
+  --slate-900:#0f172a;--slate-800:#1e293b;--slate-700:#334155;--slate-600:#475569;
+  --slate-300:#cbd5e1;--slate-200:#e2e8f0;--slate-100:#f1f5f9;--slate-50:#f8fafc;
+  --blue-800:#1e40af;--blue-700:#1d4ed8;--blue-600:#2563eb;--blue-500:#3b82f6;--blue-400:#60a5fa;--blue-50:#eff6ff;--blue-100:#dbeafe;
+  --green-700:#15803d;--green-600:#16a34a;--green-500:#22c55e;--green-100:#dcfce7;--green-50:#f0fdf4;
+  --red-700:#b91c1c;--red-600:#dc2626;--red-500:#ef4444;--red-100:#fee2e2;--red-50:#fef2f2;
+  --purple-800:#6b21a8;--purple-600:#9333ea;--purple-100:#f3e8ff;--purple-50:#faf5ff;
+  --yellow-600:#ca8a04;--yellow-500:#eab308;--yellow-100:#fef9c3;--yellow-50:#fefce8;
+  --orange-500:#f97316;--orange-50:#fff7ed;
+  --indigo-600:#4f46e5;--indigo-500:#6366f1;
+  --gray-700:#374151;--gray-500:#6b7280;--gray-200:#e5e7eb;--gray-100:#f3f4f6;
+}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;background:var(--slate-100);color:#1f2937;line-height:1.45;font-size:14px;}
+h1,h2,h3{line-height:1.25;}
+.ic{width:1.05em;height:1.05em;vertical-align:-0.16em;flex:none;}
+.scroll-x{overflow-x:auto;}
+.hidden{display:none!important;}
+.muted{color:var(--gray-500);font-size:12px;}
+.right{text-align:right;}.center{text-align:center;}.bold{font-weight:700;}
+.t-red{color:var(--red-600);}.t-green{color:var(--green-600);}.t-blue{color:var(--blue-800);}.t-purple{color:var(--purple-800);}
+.nowrap{white-space:nowrap;}
+
+/* ===== TOPBAR ===== */
+.topbar{background:var(--slate-800);color:#fff;box-shadow:0 2px 6px rgba(0,0,0,.15);}
+.topbar-inner{max-width:1200px;margin:0 auto;padding:16px;}
+.topbar-row{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:14px;margin-bottom:14px;}
+.brand h1{font-size:22px;font-weight:800;display:flex;align-items:center;gap:8px;}
+.brand h1 .ic{color:var(--blue-400);}
+.brand p{color:var(--slate-300);font-size:13px;margin-top:2px;}
+.actions{display:flex;gap:8px;flex-wrap:wrap;}
+
+/* ===== TABS ===== */
+.tabs{display:flex;gap:8px;overflow-x:auto;padding-bottom:4px;}
+.tab-btn{background:var(--slate-700);color:#fff;border:none;padding:9px 14px;border-radius:7px;display:flex;align-items:center;gap:7px;white-space:nowrap;cursor:pointer;font-size:14px;transition:background .15s;}
+.tab-btn:hover{background:var(--slate-600);}
+.tab-btn.active{background:var(--blue-500);font-weight:600;}
+
+/* ===== BUTTONS ===== */
+.btn{border:none;border-radius:7px;padding:9px 14px;display:inline-flex;align-items:center;gap:7px;cursor:pointer;font-size:14px;font-weight:500;color:#fff;transition:filter .15s,background .15s;text-decoration:none;}
+.btn:hover{filter:brightness(1.08);}
+.btn-sm{padding:5px 9px;font-size:12px;border-radius:6px;}
+.btn-xs{padding:3px 7px;font-size:11px;border-radius:6px;}
+.btn-blue{background:var(--blue-600);}
+.btn-green{background:var(--green-600);}
+.btn-yellow{background:var(--yellow-600);}
+.btn-indigo{background:var(--indigo-600);}
+.btn-purple{background:var(--purple-600);}
+.btn-slate{background:var(--slate-600);}
+.btn-light{background:var(--gray-200);color:var(--gray-700);}
+.btn-block{width:100%;justify-content:center;}
+.btn-icon{background:var(--gray-200);color:var(--gray-700);border:none;border-radius:6px;padding:7px;cursor:pointer;display:inline-flex;}
+.btn-icon:hover{background:#d1d5db;}
+.link-del{background:none;border:none;color:var(--red-500);cursor:pointer;padding:2px;display:inline-flex;}
+.link-del:hover{color:var(--red-700);}
+
+/* ===== LAYOUT ===== */
+.container{max-width:1200px;margin:0 auto;padding:22px 16px;}
+.tab-content{display:none;}
+.tab-content.active{display:block;}
+.stack>*+*{margin-top:22px;}
+
+.card{background:#fff;border:1px solid var(--gray-200);border-radius:10px;box-shadow:0 1px 3px rgba(0,0,0,.07);padding:22px;}
+.card h2{font-size:18px;font-weight:700;}
+.card h3{font-size:16px;font-weight:700;display:flex;align-items:center;gap:8px;}
+
+.stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;}
+.stat{background:#fff;border:1px solid var(--gray-200);border-radius:10px;box-shadow:0 1px 3px rgba(0,0,0,.07);padding:16px;}
+.stat.accent{background:var(--blue-50);border-color:var(--blue-100);}
+.stat-label{font-size:12px;color:var(--gray-500);display:flex;align-items:center;gap:6px;}
+.stat.accent .stat-label{color:var(--blue-600);font-weight:600;}
+.stat-value{font-size:22px;font-weight:800;color:var(--slate-800);margin-top:4px;}
+.stat.accent .stat-value{color:var(--blue-800);}
+
+.split{display:grid;grid-template-columns:1fr 2fr;gap:22px;}
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:22px;}
+
+@media (max-width:900px){
+  .stats-grid{grid-template-columns:repeat(2,1fr);}
+  .split,.two-col{grid-template-columns:1fr;}
+}
+
+/* ===== FORM ===== */
+.field{margin-bottom:14px;}
+.field label{display:block;font-size:13px;font-weight:600;margin-bottom:5px;}
+.field input,.field select{width:100%;padding:9px;border:1px solid var(--slate-300);border-radius:7px;font-size:14px;background:#fff;}
+.field input:focus,.field select:focus{outline:2px solid var(--blue-400);outline-offset:-1px;}
+
+/* ===== TABLES ===== */
+.tbl{width:100%;border-collapse:collapse;font-size:13px;text-align:left;}
+.tbl th{padding:11px 10px;font-weight:600;}
+.tbl td{padding:11px 10px;border-bottom:1px solid var(--gray-100);}
+.tbl thead.head-gray th{background:var(--gray-100);color:var(--gray-600);}
+.tbl thead.head-slate th{background:var(--slate-100);color:var(--slate-700);border-bottom:2px solid var(--slate-200);}
+.tbl-mini td{padding:5px 4px;border-bottom:1px solid var(--gray-100);}
+.tbl-mini input{width:100%;padding:5px;border:1px solid var(--slate-200);border-radius:5px;font-size:12px;}
+
+.rate-table{min-width:1050px;border-collapse:collapse;width:100%;font-size:12px;}
+.rate-table thead th{background:var(--slate-800);color:#fff;padding:8px 6px;border:1px solid var(--slate-700);text-align:center;}
+.rate-table tbody td{border:1px solid var(--gray-200);padding:6px;}
+.cell-paid{background:var(--green-100);color:var(--green-700);text-align:center;}
+.cell-part{background:var(--yellow-100);color:#854d0e;text-align:center;}
+.cell-due{background:var(--red-50);color:var(--red-700);text-align:center;}
+.cell-empty{background:var(--gray-100);}
+
+.badge{display:inline-block;padding:3px 8px;border-radius:999px;font-size:11px;font-weight:600;}
+.badge.in{background:var(--green-100);color:var(--green-700);}
+.badge.out{background:var(--red-100);color:var(--red-700);}
+
+.totrow td{background:var(--slate-800);color:#fff;font-weight:700;padding:10px;}
+
+/* ===== WHATSAPP MENU ===== */
+.wa-wrap{position:relative;display:inline-flex;gap:7px;justify-content:center;}
+.menu-wa{position:absolute;top:42px;right:0;background:#fff;border:1px solid var(--gray-200);box-shadow:0 10px 25px rgba(0,0,0,.18);border-radius:8px;width:210px;z-index:50;text-align:left;overflow:hidden;}
+.menu-wa .head{padding:8px 12px;font-size:11px;font-weight:700;background:var(--slate-100);color:var(--slate-600);text-transform:uppercase;letter-spacing:.04em;}
+.menu-wa button{width:100%;text-align:left;padding:9px 12px;border:none;background:#fff;cursor:pointer;font-size:13px;display:flex;align-items:center;gap:8px;border-top:1px solid var(--gray-100);}
+.menu-wa button:hover{background:var(--green-50);}
+
+/* ===== TOAST ===== */
+.toast{position:fixed;top:16px;right:16px;z-index:9999;transform:translateX(120%);opacity:0;transition:all .3s;}
+.toast.show{transform:translateX(0);opacity:1;}
+.toast-box{background:#fff;border-left:4px solid var(--blue-500);padding:14px 16px;border-radius:8px;box-shadow:0 10px 25px rgba(0,0,0,.18);display:flex;align-items:center;gap:12px;min-width:300px;}
+.toast-box.success{border-left-color:var(--green-500);}
+.toast-box.error{border-left-color:var(--red-500);}
+.toast-box .ic{font-size:22px;width:22px;height:22px;}
+
+.hero{background:linear-gradient(90deg,var(--indigo-500),var(--purple-600));color:#fff;border-radius:10px;padding:30px;}
+.hero h2{font-size:26px;font-weight:800;display:flex;align-items:center;gap:12px;}
+.ai-out{white-space:pre-wrap;background:var(--slate-50);border:1px solid var(--gray-200);padding:16px;border-radius:8px;font-size:14px;}
+
+.note{background:var(--blue-50);border:1px solid var(--blue-100);color:var(--blue-800);border-radius:8px;padding:10px 14px;font-size:13px;display:flex;gap:8px;align-items:flex-start;}
+
+/* ===== PRINT DOCS (hidden on screen) ===== */
+#print-root{display:none;}
+@media print{
+  body.print-doc-mode .app{display:none!important;}
+  body.print-doc-mode #print-root{display:block!important;}
+  #print-root>section{display:none;}
+  #print-root>section.active{display:block;}
+  .no-print{display:none!important;}
+  body{background:#fff;}
+}
+/* shared print styling */
+.pdoc{font-family:Arial,Helvetica,sans-serif;color:#222;-webkit-print-color-adjust:exact;print-color-adjust:exact;}
+.pdoc .ph-head{border-bottom:3px solid var(--blue-800);padding-bottom:10px;margin-bottom:18px;text-align:center;}
+.pdoc .ph-head h1{font-size:22px;color:var(--blue-800);text-transform:uppercase;margin:0;}
+.pdoc .ph-head p{font-size:12px;margin:3px 0;}
+.pdoc h2.sec{font-size:16px;background:var(--slate-100);padding:7px 10px;margin:16px 0 8px;border-left:4px solid var(--blue-500);}
+.pdoc table{width:100%;border-collapse:collapse;}
+.pdoc .kv td{padding:5px 4px;font-size:13px;}
+.pdoc .grid-tbl th{background:var(--slate-100);padding:6px;font-size:11px;border:1px solid #cbd5e1;}
+.pdoc .grid-tbl td{padding:5px 6px;font-size:11px;border:1px solid #e5e7eb;}
+.pdoc .grid-tbl tfoot td{background:var(--slate-200);font-weight:700;border:1px solid #cbd5e1;}
+.pdoc .saldo-box{border:2px solid;padding:14px;text-align:center;border-radius:8px;margin-top:18px;}
+.pdoc tr{page-break-inside:avoid;}
+</style>
+</head>
+<body>
+
+<!-- ============ APP (screen) ============ -->
+<div class="app">
+
+  <!-- TOPBAR -->
+  <div class="topbar no-print">
+    <div class="topbar-inner">
+      <div class="topbar-row">
+        <div class="brand">
+          <h1><span class="ic-slot" data-ic="wallet"></span> Agorà - Gestione 2026</h1>
+          <p>Amministratore: Dott. Biagio Izzo &nbsp;|&nbsp; C.F. 93117630611 &nbsp;|&nbsp; <span style="color:#86efac;">Versione Offline</span></p>
+        </div>
+        <div class="actions">
+          <input type="file" id="fileImport" accept=".xlsx" class="hidden" onchange="handleImport(event)">
+          <button class="btn btn-yellow" title="Ripristina i dati da un file esportato da questo programma" onclick="document.getElementById('fileImport').click()">
+            <span class="ic-slot" data-ic="upload"></span> Importa
+          </button>
+          <button class="btn btn-green" onclick="handleExportExcel()">
+            <span class="ic-slot" data-ic="file"></span> Esporta Excel
+          </button>
+          <button class="btn btn-blue" onclick="printGenerale()">
+            <span class="ic-slot" data-ic="printer"></span> Stampa Vista (PDF)
+          </button>
+        </div>
+      </div>
+      <div class="tabs" id="tab-buttons"></div>
+    </div>
+  </div>
+
+  <!-- MAIN -->
+  <div class="container">
+
+    <!-- TAB: PRIMA NOTA -->
+    <div id="tab-prima-nota" class="tab-content active stack">
+      <div class="stats-grid">
+        <div class="stat"><div class="stat-label"><span class="ic-slot" data-ic="bank"></span> Poste Italiane</div><div class="stat-value" id="val-poste"></div></div>
+        <div class="stat"><div class="stat-label"><span class="ic-slot" data-ic="wallet"></span> Cassa Contanti</div><div class="stat-value" id="val-cassa"></div></div>
+        <div class="stat"><div class="stat-label">Fondo Pensiline</div><div class="stat-value" id="val-fondo"></div></div>
+        <div class="stat accent"><div class="stat-label">Totale Liquidità</div><div class="stat-value" id="val-totale"></div></div>
+      </div>
+
+      <div class="split">
+        <div class="card">
+          <h3><span class="ic-slot" data-ic="plus-circle" style="color:var(--blue-500)"></span> Registra Movimento</h3>
+          <form id="form-movimento" onsubmit="handleAddMovimento(event)" style="margin-top:16px;">
+            <div class="field"><label>Data</label><input type="date" id="form-data" required></div>
+            <div class="field"><label>Tipo Operazione</label>
+              <select id="form-tipo" onchange="toggleCondominoSelect()">
+                <option value="VERSAMENTO_ORD">Versamento Condomino (Ordinario)</option>
+                <option value="VERSAMENTO_STRAORD">Versamento Condomino (Straordinario)</option>
+                <option value="SPESA_ORD">Spesa Condominiale (Ordinaria)</option>
+                <option value="SPESA_STRAORD">Spesa Condominiale (Straordinaria)</option>
+              </select>
+            </div>
+            <div class="field" id="div-condomino"><label>Condomino</label><select id="form-condomino"></select></div>
+            <div class="field"><label>Descrizione</label><input type="text" id="form-desc" placeholder="Es. Pulizia scale..." required></div>
+            <div class="field"><label>Importo (€)</label><input type="number" id="form-importo" step="0.01" required></div>
+            <button type="submit" class="btn btn-blue btn-block">Salva Movimento</button>
+          </form>
+        </div>
+        <div class="card">
+          <h3>Ultimi Movimenti Registrati</h3>
+          <div class="scroll-x" style="margin-top:14px;">
+            <table class="tbl">
+              <thead class="head-gray"><tr>
+                <th>Data</th><th>Tipo</th><th>Descrizione</th>
+                <th class="right">Entrata</th><th class="right">Uscita</th><th class="center">Azioni</th>
+              </tr></thead>
+              <tbody id="table-movimenti"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- TAB: PREVENTIVO & RATE -->
+    <div id="tab-preventivo" class="tab-content stack">
+      <div class="two-col">
+        <div class="card">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;">
+            <h2 class="t-blue">Preventivo Ordinario '26</h2>
+            <button class="btn btn-blue btn-xs" onclick="handleAddVoceOrd()"><span class="ic-slot" data-ic="plus"></span> Voce</button>
+          </div>
+          <table class="tbl tbl-mini"><tbody id="tbody-voci-ord"></tbody></table>
+          <div class="right bold t-blue" style="font-size:17px;margin-top:8px;">Totale Ord: <span id="tot-ord-lbl"></span></div>
+        </div>
+        <div class="card">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;">
+            <h2 class="t-purple">Nuovi Lavori Straord. '26</h2>
+            <button class="btn btn-purple btn-xs" onclick="handleAddVoceStraord()"><span class="ic-slot" data-ic="plus"></span> Lavoro</button>
+          </div>
+          <table class="tbl tbl-mini"><tbody id="tbody-voci-straord"></tbody></table>
+          <div class="right bold t-purple" style="font-size:17px;margin-top:8px;">Totale Nuovi Straord: <span id="tot-straord-lbl"></span></div>
+        </div>
+      </div>
+
+      <div style="display:flex;justify-content:flex-end;">
+        <button class="btn btn-indigo" onclick="printPreventivo()"><span class="ic-slot" data-ic="printer"></span> Stampa Bilancio Preventivo Ufficiale (PDF)</button>
+      </div>
+
+      <div class="card">
+        <h2 style="margin-bottom:6px;">Piano Rateale Mensile (Ordinario)</h2>
+        <div class="note" style="margin-bottom:14px;">
+          <span class="ic-slot" data-ic="info"></span>
+          <span>Preventivo Ordinario: <b id="val-prev-ord"></b> &nbsp;•&nbsp; Nuovi Lavori Straordinari: <b id="val-prev-straord"></b></span>
+        </div>
+        <div class="scroll-x" style="padding-bottom:6px;">
+          <table class="rate-table">
+            <thead><tr id="thead-mesi"></tr></thead>
+            <tbody id="tbody-preventivo"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- TAB: DETTAGLIO -->
+    <div id="tab-dettaglio" class="tab-content">
+      <div class="card">
+        <h2 style="margin-bottom:18px;">Posizioni Condòmini e Solleciti</h2>
+        <div class="scroll-x" style="padding-bottom:140px;">
+          <table class="tbl">
+            <thead class="head-slate"><tr>
+              <th>Condòmino</th>
+              <th class="center" style="background:var(--yellow-50)">Debito Ord. '25</th>
+              <th class="center" style="background:var(--orange-50)">Debito Straord. '25</th>
+              <th class="center t-blue">Da Vers. Ord. '26</th>
+              <th class="center t-purple">Da Vers. Straord. '26</th>
+              <th class="center bold" style="background:var(--red-50);color:var(--red-700)">TOTALE DEBITO</th>
+              <th class="center" style="width:170px;">Azioni Ufficiali</th>
+            </tr></thead>
+            <tbody id="tbody-dettaglio"></tbody>
+            <tfoot id="tfoot-dettaglio"></tfoot>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- TAB: STATO PATRIMONIALE -->
+    <div id="tab-consuntivo" class="tab-content stack">
+      <div style="display:flex;justify-content:flex-end;">
+        <button class="btn btn-indigo" onclick="printConsuntivo()"><span class="ic-slot" data-ic="printer"></span> Stampa Stato Patrimoniale Ufficiale (PDF)</button>
+      </div>
+      <div class="card">
+        <h2 style="margin-bottom:22px;">Situazione Patrimoniale (Consuntivo Live)</h2>
+        <div class="two-col">
+          <div>
+            <h3 class="t-blue" style="border-bottom:2px solid var(--blue-100);padding-bottom:8px;margin-bottom:14px;">ATTIVITÀ (Dare)</h3>
+            <table class="tbl"><tbody id="tbody-attivita"></tbody><tfoot id="tfoot-attivita"></tfoot></table>
+          </div>
+          <div>
+            <h3 class="t-red" style="border-bottom:2px solid var(--red-100);padding-bottom:8px;margin-bottom:14px;">PASSIVITÀ E NETTO (Avere)</h3>
+            <table class="tbl"><tbody id="tbody-passivita"></tbody><tfoot id="tfoot-passivita"></tfoot></table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- TAB: AI -->
+    <div id="tab-ai-assistant" class="tab-content stack">
+      <div class="hero">
+        <h2><span class="ic-slot" data-ic="sparkle" style="color:#fde047"></span> Assistente</h2>
+        <p style="margin-top:6px;">Analisi automatica dei conti (elaborazione locale, nessun invio dati).</p>
+      </div>
+      <div class="card">
+        <button class="btn btn-indigo btn-block" style="padding:13px;" onclick="generateAIContent()"><span class="ic-slot" data-ic="sparkle"></span> Genera Resoconto Direzionale</button>
+      </div>
+      <div class="card" id="ai-response-container" style="display:none;">
+        <h3 class="t-blue" style="margin-bottom:14px;">Risultato</h3>
+        <div id="ai-response-text" class="ai-out"></div>
+      </div>
+    </div>
+
+  </div><!-- /container -->
+</div><!-- /app -->
+
+<!-- ============ PRINT DOCS ============ -->
+<div id="print-root">
+  <section id="pd-estratto" class="pdoc"></section>
+  <section id="pd-preventivo" class="pdoc"></section>
+  <section id="pd-consuntivo" class="pdoc"></section>
+  <section id="pd-generale" class="pdoc"></section>
+</div>
+
+<!-- TOAST -->
+<div id="toast" class="toast"><div class="toast-box" id="toast-box">
+  <span class="ic-slot" id="toast-icon" data-ic="info"></span>
+  <span id="toast-msg" style="font-weight:500;"></span>
+</div></div>
+
+<script>
+/* =================== ICONS (inline SVG) =================== */
+const ICONS = {
+  wallet:'<path d="M3 7h13a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h12"/><circle cx="16" cy="13" r="1.4" fill="currentColor" stroke="none"/>',
+  bank:'<path d="M3 21h18M4 10h16M5 6l7-3 7 3M5 10v9M19 10v9M9 10v9M15 10v9"/>',
+  printer:'<path d="M6 9V3h12v6M6 18H4a2 2 0 0 1-2-2v-4a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v4a2 2 0 0 1-2 2h-2M6 14h12v7H6z"/>',
+  upload:'<path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M17 8l-5-5-5 5M12 3v12"/>',
+  file:'<path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z M14 2v6h6"/><path d="M9 13l3 4M12 13l-3 4" stroke-width="1.6"/>',
+  'plus-circle':'<circle cx="12" cy="12" r="9"/><path d="M12 8v8M8 12h8"/>',
+  plus:'<path d="M12 5v14M5 12h14"/>',
+  trash:'<path d="M3 6h18M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2M10 11v6M14 11v6"/>',
+  x:'<path d="M18 6 6 18M6 6l12 12"/>',
+  'x-circle':'<circle cx="12" cy="12" r="9"/><path d="M15 9l-6 6M9 9l6 6"/>',
+  'check-circle':'<path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><path d="M22 4 12 14.01l-3-3"/>',
+  info:'<circle cx="12" cy="12" r="9"/><path d="M12 16v-4M12 8h.01"/>',
+  alert:'<circle cx="12" cy="12" r="9"/><path d="M12 8v4M12 16h.01"/>',
+  octagon:'<path d="M7.9 2h8.2L22 7.9v8.2L16.1 22H7.9L2 16.1V7.9z"/><path d="M12 8v4M12 16h.01"/>',
+  users:'<path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/>',
+  calendar:'<path d="M8 2v4M16 2v4M3 10h18"/><rect x="3" y="4" width="18" height="18" rx="2"/>',
+  'calendar-check':'<path d="M8 2v4M16 2v4M3 10h18"/><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M9 16l2 2 4-4"/>',
+  'calendar-warn':'<path d="M8 2v4M16 2v4M3 10h18"/><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M12 13v3M12 19h.01"/>',
+  calculator:'<rect x="4" y="2" width="16" height="20" rx="2"/><path d="M8 6h8M8 10h.01M12 10h.01M16 10h.01M8 14h.01M12 14h.01M16 14h.01M8 18h4"/>',
+  sparkle:'<path d="M12 2l2.2 6.6L21 11l-6.8 2.4L12 20l-2.2-6.6L3 11l6.8-2.4z"/>',
+  wa:'<path d="M21 11.5a8.4 8.4 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.4 8.4 0 0 1-3.8-.9L3 21l1.9-5.7a8.4 8.4 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.4 8.4 0 0 1 3.8-.9h.5a8.5 8.5 0 0 1 8 8z"/>'
+};
+function ic(name, cls){
+  const body = ICONS[name] || ICONS.info;
+  return '<svg class="ic'+(cls?' '+cls:'')+'" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">'+body+'</svg>';
+}
+function hydrateIcons(root){
+  (root||document).querySelectorAll('.ic-slot[data-ic]').forEach(el=>{
+    el.outerHTML = ic(el.getAttribute('data-ic'), el.getAttribute('style')?'':'' ) ;
+  });
+}
+
+/* =================== DATI =================== */
+const INITIAL_CONDOMINI = [
+  { id:'A5', name:'AUDI Giuseppe', millesimi:71.4286, arretrati:{ord:-202.48,cancello:0.67,illuminazione:42.99,pensiline:11.31,citofoni:0.34,fabbro:0.34} },
+  { id:'A12', name:'DI GIOVANNANTONIO Giovanna', millesimi:71.4286, arretrati:{ord:42.89,cancello:-0.01,illuminazione:44.09,pensiline:10.97,citofoni:0,fabbro:0} },
+  { id:'A8', name:'GAMBERO Michele', millesimi:71.4286, arretrati:{ord:42.81,cancello:0,illuminazione:44.08,pensiline:10.97,citofoni:0,fabbro:0} },
+  { id:'A7', name:'Izzo Biagio', millesimi:71.4286, arretrati:{ord:41.38,cancello:0,illuminazione:44.08,pensiline:10.97,citofoni:0,fabbro:0} },
+  { id:'A13', name:'MARRA Raffaele', millesimi:71.4286, arretrati:{ord:42.81,cancello:-0.01,illuminazione:44.09,pensiline:10.97,citofoni:0,fabbro:0} },
+  { id:'A4', name:'MASTROIANNI Filomena', millesimi:71.4286, arretrati:{ord:68.18,cancello:-0.01,illuminazione:32.65,pensiline:10.97,citofoni:0,fabbro:0} },
+  { id:'A2', name:'MASTROIANNI Mauro', millesimi:71.4286, arretrati:{ord:42.81,cancello:-0.01,illuminazione:44.08,pensiline:10.97,citofoni:0,fabbro:0} },
+  { id:'A9', name:'PARILLO Rosanna', millesimi:71.4286, arretrati:{ord:43.84,cancello:0.33,illuminazione:44.76,pensiline:105.97,citofoni:61.00,fabbro:0.34} },
+  { id:'A14', name:'PASCARELLA Vincenza', millesimi:71.4286, arretrati:{ord:42.81,cancello:-0.15,illuminazione:43.36,pensiline:10.97,citofoni:0,fabbro:0} },
+  { id:'A6', name:'PETRUCCELLI Gerardina', millesimi:71.4286, arretrati:{ord:24.46,cancello:34.85,illuminazione:44.08,pensiline:105.97,citofoni:0,fabbro:70.59} },
+  { id:'A15', name:'SCARAMUZZO Walter', millesimi:71.4286, arretrati:{ord:35.15,cancello:0,illuminazione:0,pensiline:0,citofoni:0,fabbro:0} },
+  { id:'A11', name:'TENNERIELLO Antonio', millesimi:71.4286, arretrati:{ord:27.32,cancello:-0.01,illuminazione:44.08,pensiline:10.97,citofoni:0,fabbro:0} },
+  { id:'A10', name:'VALENTINO Angela', millesimi:71.4286, arretrati:{ord:-174.48,cancello:-0.01,illuminazione:43.37,pensiline:10.97,citofoni:0,fabbro:0} },
+  { id:'A3', name:'VILLANO Annamaria', millesimi:71.4286, arretrati:{ord:42.81,cancello:-0.01,illuminazione:44.08,pensiline:10.97,citofoni:0,fabbro:0} },
+  { id:'exA15', name:'LUONGO Giuseppe', millesimi:0, arretrati:{ord:4.00,cancello:-0.01,illuminazione:44.08,pensiline:105.97,citofoni:0,fabbro:0} }
+];
+const INITIAL_LIQUIDITA = { poste:122.39, cassa:0.00, fondoPensiline:457.53 };
+const INITIAL_DEBITI_TERZI = 1915.13;
+const MESI = ['Gen','Feb','Mar','Apr','Mag','Giu','Lug','Ago','Set','Ott','Nov','Dic'];
+
+let activeTab='prima-nota';
+let menuApertoId=null;
+let vociPreventivoOrd=[], vociPreventivoStraord=[], movimenti=[];
+let preventivoOrd=0, preventivoStraord=0, calcoliCondomini=[], disponibilitaAttuale={};
+
+/* =================== INIT =================== */
+function initApp(){
+  hydrateIcons();
+  document.getElementById('form-data').value = new Date().toISOString().split('T')[0];
+
+  vociPreventivoOrd = JSON.parse(localStorage.getItem('agora_voci_ord')) || [
+    {id:1, desc:'Gestione conto corrente bancario', importo:279.91},
+    {id:2, desc:'Trasmissione mod. 770', importo:100.00},
+    {id:3, desc:'Spazi esterni / Illuminazione', importo:1840.00},
+    {id:4, desc:'Spazi esterni / Manutenzione giardino', importo:396.50},
+    {id:5, desc:'Onorari amministratore', importo:1176.00}
+  ];
+  vociPreventivoStraord = JSON.parse(localStorage.getItem('agora_voci_straord')) || [];
+  movimenti = JSON.parse(localStorage.getItem('agora_movimenti')) || [];
+
+  const sel = document.getElementById('form-condomino');
+  INITIAL_CONDOMINI.forEach(c => sel.add(new Option(c.name, c.id)));
+
+  renderTabs();
+  recalculateState();
+}
+
+function saveData(){
+  localStorage.setItem('agora_voci_ord', JSON.stringify(vociPreventivoOrd));
+  localStorage.setItem('agora_voci_straord', JSON.stringify(vociPreventivoStraord));
+  localStorage.setItem('agora_movimenti', JSON.stringify(movimenti));
+}
+
+const formatEuro = v => new Intl.NumberFormat('it-IT',{style:'currency',currency:'EUR'}).format(v||0);
+
+/* =================== TOAST =================== */
+function mostraAlert(msg, type){
+  type = type||'info';
+  const box=document.getElementById('toast-box');
+  document.getElementById('toast-msg').innerText=msg;
+  box.className='toast-box '+(type==='success'?'success':type==='error'?'error':'');
+  const iconName = type==='success'?'check-circle':type==='error'?'alert':'info';
+  const color = type==='success'?'var(--green-500)':type==='error'?'var(--red-500)':'var(--blue-500)';
+  const tEl=document.getElementById('toast');
+  tEl.querySelector('.ic')?.remove();
+  box.insertAdjacentHTML('afterbegin', ic(iconName));
+  box.querySelector('.ic').style.color=color;
+  tEl.classList.add('show');
+  clearTimeout(window._toastT);
+  window._toastT=setTimeout(()=>tEl.classList.remove('show'),4000);
+}
+
+/* =================== CALCOLI =================== */
+function recalculateState(){
+  preventivoOrd = vociPreventivoOrd.reduce((s,v)=>s+parseFloat(v.importo||0),0);
+  preventivoStraord = vociPreventivoStraord.reduce((s,v)=>s+parseFloat(v.importo||0),0);
+
+  calcoliCondomini = INITIAL_CONDOMINI.map(c=>{
+    const quotaOrd2026=(preventivoOrd*c.millesimi)/1000;
+    const quotaStraord2026=(preventivoStraord*c.millesimi)/1000;
+    const versamentiOrd=movimenti.filter(m=>m.condominoId===c.id&&m.tipo==='VERSAMENTO_ORD').reduce((s,m)=>s+parseFloat(m.importo),0);
+    const versamentiStraord=movimenti.filter(m=>m.condominoId===c.id&&m.tipo==='VERSAMENTO_STRAORD').reduce((s,m)=>s+parseFloat(m.importo),0);
+
+    let arretratiOrd=c.arretrati.ord;
+    let arretratiStraord=c.arretrati.cancello+c.arretrati.illuminazione+c.arretrati.pensiline+c.arretrati.citofoni+c.arretrati.fabbro;
+
+    let debOrd=arretratiOrd, vOrd=versamentiOrd;
+    if(debOrd>0){ if(vOrd>=debOrd){vOrd-=debOrd;debOrd=0;} else {debOrd-=vOrd;vOrd=0;} }
+    else if(debOrd<0){ vOrd+=Math.abs(debOrd); debOrd=0; }
+    let resOrd=Math.max(0,quotaOrd2026-vOrd), credOrd=Math.max(0,vOrd-quotaOrd2026);
+
+    let debStra=arretratiStraord, vStra=versamentiStraord;
+    if(debStra>0){ if(vStra>=debStra){vStra-=debStra;debStra=0;} else {debStra-=vStra;vStra=0;} }
+    else if(debStra<0){ vStra+=Math.abs(debStra); debStra=0; }
+    let resStra=Math.max(0,quotaStraord2026-vStra), credStra=Math.max(0,vStra-quotaStraord2026);
+
+    // Compensazione incrociata
+    let totStraDeb=debStra+resStra;
+    if(credOrd>0 && totStraDeb>0){
+      if(credOrd>=totStraDeb){credOrd-=totStraDeb;debStra=0;resStra=0;}
+      else {let cu=credOrd;credOrd=0; if(cu>=debStra){cu-=debStra;debStra=0;resStra-=cu;} else {debStra-=cu;}}
+    }
+    let totOrdDeb=debOrd+resOrd;
+    if(credStra>0 && totOrdDeb>0){
+      if(credStra>=totOrdDeb){credStra-=totOrdDeb;debOrd=0;resOrd=0;}
+      else {let cu=credStra;credStra=0; if(cu>=debOrd){cu-=debOrd;debOrd=0;resOrd-=cu;} else {debOrd-=cu;}}
+    }
+
+    return {
+      ...c, quotaOrd2026, quotaStraord2026, versamentiOrd, versamentiStraord,
+      debitoResiduoOrd:debOrd, residuoOrd2026:resOrd, debitoResiduoStraord:debStra, residuoStraord2026:resStra,
+      creditoOrd2026:credOrd, creditoStraord2026:credStra,
+      totaleDebitoAttuale: debOrd+resOrd+debStra+resStra-credOrd-credStra,
+      versamentiOrdDisponibili:versamentiOrd, versamentiStraordDisponibili:versamentiStraord
+    };
+  });
+
+  let poste=INITIAL_LIQUIDITA.poste, cassa=INITIAL_LIQUIDITA.cassa, fp=INITIAL_LIQUIDITA.fondoPensiline;
+  movimenti.forEach(m=>{let amt=parseFloat(m.importo); if(m.tipo.includes('VERSAMENTO'))poste+=amt; if(m.tipo.includes('SPESA'))poste-=amt;});
+  disponibilitaAttuale={poste,cassa,fondoPensiline:fp,totale:poste+cassa+fp};
+
+  renderViews();
+}
+
+/* =================== TABS =================== */
+const tabsDef=[
+  {id:'prima-nota',label:'Prima Nota',icon:'plus-circle'},
+  {id:'preventivo',label:'Preventivo & Rate',icon:'calendar'},
+  {id:'dettaglio',label:'Dettaglio Condòmini',icon:'users'},
+  {id:'consuntivo',label:'Stato Patrimoniale',icon:'calculator'},
+  {id:'ai-assistant',label:'Assistente',icon:'sparkle'}
+];
+function renderTabs(){
+  document.getElementById('tab-buttons').innerHTML = tabsDef.map(t=>
+    `<button class="tab-btn ${activeTab===t.id?'active':''}" onclick="switchTab('${t.id}')">${ic(t.icon)} ${t.label}</button>`
+  ).join('');
+  document.querySelectorAll('.tab-content').forEach(el=>el.classList.remove('active'));
+  document.getElementById('tab-'+activeTab).classList.add('active');
+}
+function switchTab(t){ activeTab=t; renderTabs(); renderViews(); }
+
+/* =================== RENDER =================== */
+function renderViews(){
+  // PRIMA NOTA
+  document.getElementById('val-poste').innerText=formatEuro(disponibilitaAttuale.poste);
+  document.getElementById('val-cassa').innerText=formatEuro(disponibilitaAttuale.cassa);
+  document.getElementById('val-fondo').innerText=formatEuro(disponibilitaAttuale.fondoPensiline);
+  document.getElementById('val-totale').innerText=formatEuro(disponibilitaAttuale.totale);
+
+  let sortedMov=[...movimenti].sort((a,b)=>new Date(b.data)-new Date(a.data));
+  document.getElementById('table-movimenti').innerHTML = sortedMov.length===0
+    ? `<tr><td colspan="6" class="center muted" style="padding:18px;">Nessun movimento.</td></tr>`
+    : sortedMov.map(m=>{
+        let isE=m.tipo.includes('VERSAMENTO');
+        let cs=isE?INITIAL_CONDOMINI.find(c=>c.id===m.condominoId)?.name:'';
+        return `<tr><td>${new Date(m.data).toLocaleDateString('it-IT')}</td>
+          <td><span class="badge ${isE?'in':'out'}">${m.tipo.replace('_',' ')}</span></td>
+          <td>${escHtml(m.desc)} ${cs?`<br><span class="muted">${escHtml(cs)}</span>`:''}</td>
+          <td class="right t-green bold">${isE?formatEuro(m.importo):''}</td>
+          <td class="right t-red bold">${!isE?formatEuro(m.importo):''}</td>
+          <td class="center"><button class="link-del" onclick="deleteMovimento(${m.id})">${ic('trash')}</button></td></tr>`;
+      }).join('');
+
+  // VOCI ORD
+  document.getElementById('tbody-voci-ord').innerHTML = vociPreventivoOrd.map(v=>`
+    <tr><td><input type="text" value="${escAttr(v.desc)}" onchange="updateV('O',${v.id},'desc',this.value)"></td>
+    <td style="width:120px;"><input type="number" step="0.01" value="${v.importo}" onchange="updateV('O',${v.id},'importo',this.value)" class="right"></td>
+    <td style="width:30px;" class="center"><button class="link-del" onclick="delV('O',${v.id})">${ic('x-circle')}</button></td></tr>`).join('');
+  document.getElementById('tot-ord-lbl').innerText=formatEuro(preventivoOrd);
+
+  // VOCI STRAORD
+  document.getElementById('tbody-voci-straord').innerHTML = vociPreventivoStraord.length===0
+    ? `<tr><td colspan="3" class="center muted" style="padding:8px;">Nessun lavoro inserito</td></tr>`
+    : vociPreventivoStraord.map(v=>`
+    <tr><td><input type="text" value="${escAttr(v.desc)}" onchange="updateV('S',${v.id},'desc',this.value)"></td>
+    <td style="width:120px;"><input type="number" step="0.01" value="${v.importo}" onchange="updateV('S',${v.id},'importo',this.value)" class="right"></td>
+    <td style="width:30px;" class="center"><button class="link-del" onclick="delV('S',${v.id})">${ic('x-circle')}</button></td></tr>`).join('');
+  document.getElementById('tot-straord-lbl').innerText=formatEuro(preventivoStraord);
+
+  // BANNER PREVENTIVO
+  document.getElementById('val-prev-ord').innerText=formatEuro(preventivoOrd);
+  document.getElementById('val-prev-straord').innerText=formatEuro(preventivoStraord);
+
+  // RATE
+  document.getElementById('thead-mesi').innerHTML =
+    `<th>Condòmino</th><th style="background:var(--slate-700)">Quota Annuale</th>${MESI.map(m=>`<th>${m}</th>`).join('')}<th>Straord. Anno</th>`;
+  document.getElementById('tbody-preventivo').innerHTML = calcoliCondomini.map(c=>{
+    let qm=c.quotaOrd2026/12, vd=c.versamentiOrdDisponibili;
+    let mh=MESI.map(()=>{
+      if(c.millesimi===0) return `<td class="cell-empty"></td>`;
+      let p=0; if(vd>=qm){p=qm;vd-=qm;} else if(vd>0){p=vd;vd=0;}
+      let paid=p>=qm-0.05;
+      let cls=paid?'cell-paid':(p>0?'cell-part':'cell-due');
+      return `<td class="${cls}">${paid?ic('check-circle'):formatEuro(qm-p)}</td>`;
+    }).join('');
+    let tsd=c.arretrati.cancello+c.arretrati.illuminazione+c.arretrati.pensiline+c.arretrati.citofoni+c.arretrati.fabbro+c.quotaStraord2026;
+    let bst=c.debitoResiduoStraord+c.residuoStraord2026-c.creditoStraord2026;
+    let sh=(tsd===0&&bst===0)?'-':(bst>0.05?`<span class="t-red">${formatEuro(bst)}</span>`:(bst<-0.05?`<span class="t-green">CR ${formatEuro(Math.abs(bst))}</span>`:`<span class="t-green bold">SALDATO</span>`));
+    return `<tr><td class="bold">${escHtml(c.name)}</td><td class="center bold" style="background:var(--blue-50)">${formatEuro(c.quotaOrd2026)}</td>${mh}<td class="center" style="background:var(--purple-50)">${sh}</td></tr>`;
+  }).join('');
+
+  // DETTAGLIO
+  document.getElementById('tbody-dettaglio').innerHTML = calcoliCondomini.map(c=>{
+    let s25=c.arretrati.cancello+c.arretrati.illuminazione+c.arretrati.pensiline+c.arretrati.citofoni+c.arretrati.fabbro;
+    return `<tr><td class="bold">${escHtml(c.name)}</td>
+      <td class="center ${c.arretrati.ord>0?'t-red':''}">${formatEuro(c.arretrati.ord)}</td>
+      <td class="center ${s25>0?'t-red':''}">${formatEuro(s25)}</td>
+      <td class="center">${formatEuro(c.residuoOrd2026)}</td>
+      <td class="center">${formatEuro(c.residuoStraord2026)}</td>
+      <td class="center bold ${c.totaleDebitoAttuale>0?'t-red':''}">${c.totaleDebitoAttuale>0?formatEuro(c.totaleDebitoAttuale):(c.totaleDebitoAttuale<0?'CR '+formatEuro(Math.abs(c.totaleDebitoAttuale)):'0,00 €')}</td>
+      <td class="center">
+        <div class="wa-wrap">
+          <button class="btn-icon" title="Stampa Estratto Conto (A4)" onclick="printEstratto('${c.id}')">${ic('printer')}</button>
+          <button class="btn btn-green btn-sm" title="Invia Sollecito" onclick="toggleMenuWhatsapp('${c.id}')">${ic('wa')}</button>
+          <div id="menu-wa-${c.id}" class="menu-wa hidden">
+            <div class="head">Invia Sollecito a:</div>
+            <button onclick="inviaWA('${c.id}','straord25')">${ic('calendar-warn')} Solo Straord. '25</button>
+            <button onclick="inviaWA('${c.id}','globale_oggi')">${ic('calendar-check')} Globale (Fino ad Oggi)</button>
+            <button onclick="inviaWA('${c.id}','totale')">${ic('octagon')} Totale (Intero Anno)</button>
+          </div>
+        </div>
+      </td></tr>`;
+  }).join('');
+  document.getElementById('tfoot-dettaglio').innerHTML='';
+
+  // PATRIMONIO
+  let toC=calcoliCondomini.reduce((s,c)=>s+(c.totaleDebitoAttuale>0?c.totaleDebitoAttuale:0),0);
+  let toD=calcoliCondomini.reduce((s,c)=>s+(c.totaleDebitoAttuale<0?Math.abs(c.totaleDebitoAttuale):0),0);
+  let toA=disponibilitaAttuale.totale+toC;
+  let toP=INITIAL_DEBITI_TERZI+toD;
+  let avz=toA-toP;
+
+  document.getElementById('tbody-attivita').innerHTML=`
+    <tr><td colspan="2" class="bold" style="color:var(--slate-600);padding-top:8px;">Liquidità</td></tr>
+    <tr><td style="padding-left:16px;">Poste</td><td class="right">${formatEuro(disponibilitaAttuale.poste)}</td></tr>
+    <tr><td style="padding-left:16px;">Cassa</td><td class="right">${formatEuro(disponibilitaAttuale.cassa)}</td></tr>
+    <tr><td style="padding-left:16px;">Fondo</td><td class="right">${formatEuro(disponibilitaAttuale.fondoPensiline)}</td></tr>
+    <tr><td colspan="2" class="bold" style="color:var(--slate-600);padding-top:14px;">Crediti vs Condòmini</td></tr>
+    ${calcoliCondomini.filter(c=>c.totaleDebitoAttuale>0.05).map(c=>`<tr><td style="padding-left:16px;">${escHtml(c.name)}</td><td class="right t-red">${formatEuro(c.totaleDebitoAttuale)}</td></tr>`).join('')}`;
+  document.getElementById('tfoot-attivita').innerHTML=`<tr class="totrow"><td style="background:var(--blue-100);color:var(--blue-800);">TOTALE ATTIVITÀ</td><td class="right" style="background:var(--blue-100);color:var(--blue-800);">${formatEuro(toA)}</td></tr>`;
+
+  document.getElementById('tbody-passivita').innerHTML=`
+    <tr><td colspan="2" class="bold" style="color:var(--slate-600);padding-top:8px;">Debiti vs Terzi</td></tr>
+    <tr><td style="padding-left:16px;">A2A</td><td class="right">${formatEuro(287)}</td></tr>
+    <tr><td style="padding-left:16px;">Erario</td><td class="right">${formatEuro(418.58)}</td></tr>
+    <tr><td style="padding-left:16px;">Fornitori (Pensiline)</td><td class="right">${formatEuro(1209.55)}</td></tr>
+    <tr><td colspan="2" class="bold" style="color:var(--slate-600);padding-top:14px;">Debiti vs Condòmini (Loro Crediti)</td></tr>
+    ${calcoliCondomini.filter(c=>c.totaleDebitoAttuale<-0.05).map(c=>`<tr><td style="padding-left:16px;">${escHtml(c.name)}</td><td class="right t-green">${formatEuro(Math.abs(c.totaleDebitoAttuale))}</td></tr>`).join('')}
+    <tr><td colspan="2" class="bold" style="color:var(--slate-600);padding-top:14px;">Bilancio</td></tr>
+    <tr><td style="padding-left:16px;font-style:italic;">Avanzo/Disavanzo Netto</td><td class="right bold t-blue">${formatEuro(avz)}</td></tr>`;
+  document.getElementById('tfoot-passivita').innerHTML=`<tr class="totrow"><td style="background:var(--red-100);color:var(--red-700);">TOTALE PASSIVITÀ + NETTO</td><td class="right" style="background:var(--red-100);color:var(--red-700);">${formatEuro(toA)}</td></tr>`;
+}
+
+/* =================== HELPERS HTML ESCAPE =================== */
+function escHtml(s){return String(s==null?'':s).replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));}
+function escAttr(s){return String(s==null?'':s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));}
+function escXml(s){return String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&apos;'}[c]));}
+
+/* =================== HANDLERS =================== */
+function toggleCondominoSelect(){
+  document.getElementById('div-condomino').style.display = document.getElementById('form-tipo').value.includes('VERSAMENTO')?'block':'none';
+}
+function handleAddMovimento(e){
+  e.preventDefault();
+  let d=document.getElementById('form-data').value, t=document.getElementById('form-tipo').value;
+  let c=document.getElementById('form-condomino').value, ds=document.getElementById('form-desc').value;
+  let i=parseFloat(document.getElementById('form-importo').value);
+  if(!d||isNaN(i))return;
+  movimenti.push({id:Date.now(), data:d, tipo:t, condominoId:t.includes('VERSAMENTO')?c:null, desc:ds, importo:i});
+  document.getElementById('form-desc').value=''; document.getElementById('form-importo').value='';
+  saveData(); recalculateState(); mostraAlert('Movimento registrato con successo','success');
+}
+function deleteMovimento(id){ movimenti=movimenti.filter(m=>m.id!==id); saveData(); recalculateState(); mostraAlert('Movimento eliminato','error'); }
+function handleAddVoceOrd(){ vociPreventivoOrd.push({id:Date.now(),desc:'Nuova Voce',importo:0}); saveData(); recalculateState(); }
+function handleAddVoceStraord(){ vociPreventivoStraord.push({id:Date.now(),desc:'Nuovo Lavoro',importo:0}); saveData(); recalculateState(); }
+function updateV(t,id,f,v){ let arr=t==='O'?vociPreventivoOrd:vociPreventivoStraord; let o=arr.find(x=>x.id===id); if(o){o[f]=f==='importo'?(parseFloat(v)||0):v; saveData(); recalculateState();} }
+function delV(t,id){ if(t==='O')vociPreventivoOrd=vociPreventivoOrd.filter(x=>x.id!==id); else vociPreventivoStraord=vociPreventivoStraord.filter(x=>x.id!==id); saveData(); recalculateState(); }
+
+function toggleMenuWhatsapp(id){
+  let m=document.getElementById('menu-wa-'+id);
+  if(menuApertoId&&menuApertoId!==id) document.getElementById('menu-wa-'+menuApertoId)?.classList.add('hidden');
+  if(m.classList.contains('hidden')){m.classList.remove('hidden');menuApertoId=id;} else {m.classList.add('hidden');menuApertoId=null;}
+}
+function inviaWA(id,tipo){
+  document.getElementById('menu-wa-'+id).classList.add('hidden'); menuApertoId=null;
+  let c=calcoliCondomini.find(x=>x.id===id); let msg='';
+  let s25=c.arretrati.cancello+c.arretrati.illuminazione+c.arretrati.pensiline+c.arretrati.citofoni+c.arretrati.fabbro;
+  if(tipo==='straord25'){
+    if(s25<=0){mostraAlert("Il condomino non ha debiti straordinari per il 2025.","info");return;}
+    msg=`Gent.le ${c.name}, le scrivo in merito alla situazione contabile del Condominio Agorà.\nLe ricordo che risulta ancora a debito per i lavori straordinari dell'anno 2025 per un importo di *${formatEuro(s25)}*.\nLa prego di voler provvedere al saldo nel più breve tempo possibile. Coordinate: Condominio Agorà - C.F. 93117630611.\nSaluti, Dott. Biagio Izzo.`;
+  } else if(tipo==='globale_oggi'){
+    let meseAttuale=new Date().getMonth()+1;
+    let quotaOrdMaturata=(c.quotaOrd2026/12)*meseAttuale;
+    let debOggi=c.arretrati.ord+s25+quotaOrdMaturata+c.quotaStraord2026-c.versamentiOrd-c.versamentiStraord;
+    if(debOggi<=0){mostraAlert("Il condomino è in regola con i pagamenti fino ad oggi.","info");return;}
+    msg=`Gent.le ${c.name}, le scrivo per un aggiornamento sui versamenti del Condominio Agorà.\nRisulta alla data odierna un saldo a debito di *${formatEuro(debOggi)}* (comprensivo di arretrati e quote maturate fino a questo mese).\nLe chiedo cortesemente di regolarizzare la posizione. Per chiarimenti sono a disposizione.\nSaluti, Dott. Biagio Izzo.`;
+  } else if(tipo==='totale'){
+    if(c.totaleDebitoAttuale<=0){mostraAlert("Il condomino non ha alcun debito sull'intero anno.","info");return;}
+    msg=`Gent.le ${c.name}, le scrivo in qualità di Amministratore del Condominio Agorà.\nIl suo saldo totale a debito, comprensivo dell'intero esercizio 2026 e di tutti gli arretrati, ammonta a *${formatEuro(c.totaleDebitoAttuale)}*.\nLa invito a provvedere ai versamenti. Coordinate: Condominio Agorà - C.F. 93117630611.\nSaluti, Dott. Biagio Izzo.`;
+  }
+  window.open(`https://wa.me/?text=${encodeURIComponent(msg)}`,'_blank');
+}
+
+/* =================== AI (locale) =================== */
+function generateAIContent(){
+  const cont=document.getElementById('ai-response-container'), txt=document.getElementById('ai-response-text');
+  cont.style.display='block';
+  const tC=calcoliCondomini.reduce((s,c)=>s+(c.totaleDebitoAttuale>0?c.totaleDebitoAttuale:0),0);
+  txt.innerText=`RESOCONTO DIREZIONALE:\nIl Condominio presenta una liquidità totale di ${formatEuro(disponibilitaAttuale.totale)}. I debiti verso terzi ammontano a ${formatEuro(INITIAL_DEBITI_TERZI)}. Da attenzionare i crediti verso i condomini morosi che ammontano a ${formatEuro(tC)}.\nSi consiglia l'emissione dei solleciti tramite l'apposito modulo nella scheda "Dettaglio Condòmini".`;
+}
+
+/* =================== STAMPA PDF (nativa) =================== */
+function setPage(orient){ document.getElementById('page-style').textContent = `@page{size:A4 ${orient};margin:${orient==='landscape'?'9mm':'14mm'};}`; }
+function openPrint(sectionId, orient){
+  setPage(orient);
+  document.querySelectorAll('#print-root>section').forEach(s=>s.classList.remove('active'));
+  document.getElementById(sectionId).classList.add('active');
+  document.body.classList.add('print-doc-mode');
+  setTimeout(()=>window.print(), 60);
+}
+window.addEventListener('afterprint', ()=>{
+  document.body.classList.remove('print-doc-mode');
+  document.querySelectorAll('#print-root>section').forEach(s=>s.classList.remove('active'));
+});
+
+function printEstratto(id){
+  const c=calcoliCondomini.find(x=>x.id===id);
+  let htmlMov=movimenti.filter(m=>m.condominoId===id).sort((a,b)=>new Date(a.data)-new Date(b.data)).map(m=>
+    `<tr><td style="padding:4px;border-bottom:1px solid #eee;">${new Date(m.data).toLocaleDateString('it-IT')}</td>
+     <td style="padding:4px;border-bottom:1px solid #eee;">${escHtml(m.desc)}</td>
+     <td style="padding:4px;border-bottom:1px solid #eee;text-align:right;font-weight:bold;color:#15803d;">${formatEuro(m.importo)}</td></tr>`).join('');
+  if(!htmlMov) htmlMov=`<tr><td colspan="3" style="padding:4px;font-style:italic;">Nessun versamento registrato nel 2026.</td></tr>`;
+  let s25=c.arretrati.cancello+c.arretrati.illuminazione+c.arretrati.pensiline+c.arretrati.citofoni+c.arretrati.fabbro;
+  const deb=c.totaleDebitoAttuale>0;
+  document.getElementById('pd-estratto').innerHTML=`
+    <div class="ph-head"><h1>Condominio Agorà</h1>
+      <p>Via Parco Arnosello Snc - Pontelatone (CE) | C.F. 93117630611</p>
+      <p style="font-weight:bold;">Amministratore: Dott. Biagio Izzo</p></div>
+    <div style="text-align:right;margin-bottom:26px;">
+      <p style="margin:0;"><b>Spett.le Condòmino:</b></p>
+      <p style="font-size:18px;font-weight:bold;margin:2px 0;">${escHtml(c.name)}</p>
+      <p style="margin:0;">Data: ${new Date().toLocaleDateString('it-IT')}</p></div>
+    <h2 class="sec">1. Situazione Arretrati (al 31.12.2025)</h2>
+    <table class="kv"><tr><td>Debito Ordinario Ereditato:</td><td style="text-align:right;font-weight:bold;">${formatEuro(c.arretrati.ord)}</td></tr>
+      <tr><td>Debiti Straordinari Ereditati:</td><td style="text-align:right;font-weight:bold;">${formatEuro(s25)}</td></tr></table>
+    <h2 class="sec" style="border-left-color:#8b5cf6;">2. Quote Preventivo Anno 2026</h2>
+    <table class="kv"><tr><td>Quota Preventivo Ordinario:</td><td style="text-align:right;font-weight:bold;">${formatEuro(c.quotaOrd2026)}</td></tr>
+      <tr><td>Quota Nuovi Lavori Straordinari:</td><td style="text-align:right;font-weight:bold;">${formatEuro(c.quotaStraord2026)}</td></tr></table>
+    <h2 class="sec" style="border-left-color:#22c55e;background:#f0fdf4;">3. Versamenti Effettuati nel 2026</h2>
+    <table style="border-collapse:collapse;font-size:12px;"><thead><tr style="background:#e2e8f0;">
+      <th style="padding:4px;text-align:left;">Data</th><th style="padding:4px;text-align:left;">Descrizione</th><th style="padding:4px;text-align:right;">Importo</th></tr></thead>
+      <tbody>${htmlMov}</tbody></table>
+    <div class="saldo-box" style="border-color:${deb?'#ef4444':'#22c55e'};background:${deb?'#fef2f2':'#f0fdf4'};">
+      <p style="margin:0;font-size:16px;font-weight:bold;">SALDO NETTO ATTUALE</p>
+      <p style="margin:6px 0 0;font-size:24px;font-weight:bold;color:${deb?'#b91c1c':'#15803d'};">
+        ${deb?'A DEBITO: '+formatEuro(c.totaleDebitoAttuale):'A CREDITO: '+formatEuro(Math.abs(c.totaleDebitoAttuale))}</p></div>`;
+  openPrint('pd-estratto','portrait');
+}
+
+function printPreventivo(){
+  let rows=calcoliCondomini.filter(c=>c.millesimi>0).map(c=>`<tr>
+    <td>${escHtml(c.name)}</td><td style="text-align:center;">${c.millesimi.toFixed(4)}</td>
+    <td style="text-align:right;">${formatEuro(c.quotaOrd2026)}</td>
+    <td style="text-align:right;">${formatEuro(c.quotaStraord2026)}</td>
+    <td style="text-align:right;font-weight:bold;">${formatEuro(c.quotaOrd2026+c.quotaStraord2026)}</td></tr>`).join('');
+  document.getElementById('pd-preventivo').innerHTML=`
+    <div class="ph-head"><h1>Bilancio Preventivo 2026</h1>
+      <p>Condominio Agorà - Amministratore: Dott. Biagio Izzo</p></div>
+    <table class="grid-tbl"><thead><tr>
+      <th style="text-align:left;">Condòmino</th><th>Millesimi</th>
+      <th style="text-align:right;">Quota Ord.</th><th style="text-align:right;">Quota Straord.</th><th style="text-align:right;">Totale Annuo</th></tr></thead>
+      <tbody>${rows}</tbody>
+      <tfoot><tr><td>TOTALI</td><td style="text-align:center;">1000.0000</td>
+        <td style="text-align:right;">${formatEuro(preventivoOrd)}</td>
+        <td style="text-align:right;">${formatEuro(preventivoStraord)}</td>
+        <td style="text-align:right;">${formatEuro(preventivoOrd+preventivoStraord)}</td></tr></tfoot></table>`;
+  openPrint('pd-preventivo','portrait');
+}
+
+function printConsuntivo(){
+  const toC=calcoliCondomini.reduce((s,c)=>s+(c.totaleDebitoAttuale>0?c.totaleDebitoAttuale:0),0);
+  const toD=calcoliCondomini.reduce((s,c)=>s+(c.totaleDebitoAttuale<0?Math.abs(c.totaleDebitoAttuale):0),0);
+  const toA=disponibilitaAttuale.totale+toC; const avz=toA-(INITIAL_DEBITI_TERZI+toD);
+  document.getElementById('pd-consuntivo').innerHTML=`
+    <div class="ph-head"><h1>Stato Patrimoniale</h1>
+      <p>Condominio Agorà - Amministratore: Dott. Biagio Izzo | Data: ${new Date().toLocaleDateString('it-IT')}</p></div>
+    <div style="display:flex;gap:24px;">
+      <div style="flex:1;">
+        <h2 class="sec" style="background:#eff6ff;">ATTIVITÀ (Dare)</h2>
+        <table style="font-size:13px;width:100%;">
+          <tr><td style="padding:3px;">Poste Italiane</td><td style="text-align:right;">${formatEuro(disponibilitaAttuale.poste)}</td></tr>
+          <tr><td style="padding:3px;">Cassa</td><td style="text-align:right;">${formatEuro(disponibilitaAttuale.cassa)}</td></tr>
+          <tr><td style="padding:3px;">Fondo Pensiline</td><td style="text-align:right;">${formatEuro(disponibilitaAttuale.fondoPensiline)}</td></tr>
+          <tr><td style="padding:3px;">Crediti vs Condòmini</td><td style="text-align:right;">${formatEuro(toC)}</td></tr>
+          <tr><td style="padding:7px 3px;font-weight:bold;border-top:1px solid #cbd5e1;">TOTALE ATTIVITÀ</td><td style="text-align:right;font-weight:bold;border-top:1px solid #cbd5e1;">${formatEuro(toA)}</td></tr></table>
+      </div>
+      <div style="flex:1;">
+        <h2 class="sec" style="background:#fef2f2;border-left-color:#ef4444;">PASSIVITÀ (Avere)</h2>
+        <table style="font-size:13px;width:100%;">
+          <tr><td style="padding:3px;">Debiti vs Terzi (A2A, Erario, Fornitori)</td><td style="text-align:right;">${formatEuro(INITIAL_DEBITI_TERZI)}</td></tr>
+          <tr><td style="padding:3px;">Debiti vs Condòmini (Loro Crediti)</td><td style="text-align:right;">${formatEuro(toD)}</td></tr>
+          <tr><td style="padding:3px;font-style:italic;">Avanzo/Disavanzo di cassa</td><td style="text-align:right;">${formatEuro(avz)}</td></tr>
+          <tr><td style="padding:7px 3px;font-weight:bold;border-top:1px solid #cbd5e1;">TOTALE PASSIVITÀ E NETTO</td><td style="text-align:right;font-weight:bold;border-top:1px solid #cbd5e1;">${formatEuro(toA)}</td></tr></table>
+      </div>
+    </div>`;
+  openPrint('pd-consuntivo','portrait');
+}
+
+function printGenerale(){
+  let head=`<th style="text-align:left;">Condòmino</th><th>Quota Ann.</th>${MESI.map(m=>`<th>${m}</th>`).join('')}<th>Straord.</th>`;
+  let rows=calcoliCondomini.map(c=>{
+    let qm=c.quotaOrd2026/12, vd=c.versamentiOrdDisponibili;
+    let mh=MESI.map(()=>{
+      if(c.millesimi===0) return `<td style="background:#f3f4f6;"></td>`;
+      let p=0; if(vd>=qm){p=qm;vd-=qm;} else if(vd>0){p=vd;vd=0;}
+      let paid=p>=qm-0.05;
+      let bg=paid?'#dcfce7':(p>0?'#fef9c3':'#fef2f2'); let col=paid?'#15803d':(p>0?'#854d0e':'#b91c1c');
+      return `<td style="text-align:center;background:${bg};color:${col};">${paid?'PAG':formatEuro(qm-p)}</td>`;
+    }).join('');
+    let bst=c.debitoResiduoStraord+c.residuoStraord2026-c.creditoStraord2026;
+    let sh=bst>0.05?formatEuro(bst):(bst<-0.05?'CR '+formatEuro(Math.abs(bst)):'-');
+    return `<tr><td style="text-align:left;font-weight:bold;">${escHtml(c.name)}</td><td style="text-align:center;background:#eff6ff;font-weight:bold;">${formatEuro(c.quotaOrd2026)}</td>${mh}<td style="text-align:center;background:#faf5ff;">${sh}</td></tr>`;
+  }).join('');
+  document.getElementById('pd-generale').innerHTML=`
+    <div class="ph-head"><h1>Situazione Generale - Piano Rate 2026</h1>
+      <p>Condominio Agorà - Amministratore: Dott. Biagio Izzo | Data: ${new Date().toLocaleDateString('it-IT')}</p></div>
+    <p style="font-size:12px;margin-bottom:8px;">Liquidità totale: <b>${formatEuro(disponibilitaAttuale.totale)}</b> &nbsp;(Poste ${formatEuro(disponibilitaAttuale.poste)} · Cassa ${formatEuro(disponibilitaAttuale.cassa)} · Fondo ${formatEuro(disponibilitaAttuale.fondoPensiline)}) &nbsp;|&nbsp; Preventivo Ord. <b>${formatEuro(preventivoOrd)}</b> · Straord. <b>${formatEuro(preventivoStraord)}</b></p>
+    <table class="grid-tbl" style="font-size:9.5px;"><thead><tr>${head}</tr></thead><tbody>${rows}</tbody></table>`;
+  openPrint('pd-generale','landscape');
+}
+
+/* =================== EXCEL ENGINE (no library) =================== */
+const CRC_TABLE=(()=>{let t=new Uint32Array(256);for(let n=0;n<256;n++){let c=n;for(let k=0;k<8;k++)c=(c&1)?(0xEDB88320^(c>>>1)):(c>>>1);t[n]=c>>>0;}return t;})();
+function crc32(bytes){let c=0xFFFFFFFF;for(let i=0;i<bytes.length;i++)c=CRC_TABLE[(c^bytes[i])&0xFF]^(c>>>8);return (c^0xFFFFFFFF)>>>0;}
+function colLetter(n){let s='';n++;while(n>0){let m=(n-1)%26;s=String.fromCharCode(65+m)+s;n=Math.floor((n-1)/26);}return s;}
+
+function makeZip(files){ // files:[{name, data:Uint8Array}]
+  const enc=new TextEncoder();
+  const u16=n=>[n&255,(n>>8)&255];
+  const u32=n=>[n&255,(n>>8)&255,(n>>16)&255,(n>>24)&255];
+  let local=[], central=[], offset=0;
+  for(const f of files){
+    const nameB=enc.encode(f.name), crc=crc32(f.data), size=f.data.length;
+    const lh=[0x50,0x4b,0x03,0x04,...u16(20),...u16(0),...u16(0),...u16(0),...u16(0),...u32(crc),...u32(size),...u32(size),...u16(nameB.length),...u16(0)];
+    local.push(new Uint8Array(lh),nameB,f.data);
+    const ch=[0x50,0x4b,0x01,0x02,...u16(20),...u16(20),...u16(0),...u16(0),...u16(0),...u16(0),...u32(crc),...u32(size),...u32(size),...u16(nameB.length),...u16(0),...u16(0),...u16(0),...u16(0),...u32(0),...u32(offset)];
+    central.push(new Uint8Array(ch),nameB);
+    offset += lh.length+nameB.length+size;
+  }
+  const cdStart=offset; let cdLen=0; central.forEach(p=>cdLen+=p.length);
+  const eocd=new Uint8Array([0x50,0x4b,0x05,0x06,...u16(0),...u16(0),...u16(files.length),...u16(files.length),...u32(cdLen),...u32(cdStart),...u16(0)]);
+  const all=[...local,...central,eocd];
+  let total=0; all.forEach(a=>total+=a.length);
+  const out=new Uint8Array(total); let pos=0;
+  all.forEach(a=>{out.set(a,pos);pos+=a.length;});
+  return out;
+}
+// Lettura entry STORE (non compressa) per nome - per il ripristino dei file generati da questo programma
+function readStoredEntry(buf, target){
+  const bytes=new Uint8Array(buf), dv=new DataView(buf), dec=new TextDecoder(); let i=0;
+  while(i+30<=bytes.length){
+    if(dv.getUint32(i,true)!==0x04034b50) break;
+    const method=dv.getUint16(i+8,true);
+    const compSize=dv.getUint32(i+18,true);
+    const nameLen=dv.getUint16(i+26,true);
+    const extraLen=dv.getUint16(i+28,true);
+    const nameStart=i+30, name=dec.decode(bytes.subarray(nameStart,nameStart+nameLen));
+    const dataStart=nameStart+nameLen+extraLen;
+    if(name===target) return method===0?bytes.subarray(dataStart,dataStart+compSize):null;
+    i=dataStart+compSize;
+  }
+  return null;
+}
+
+function sheetXml(matrix){
+  const enc=new TextEncoder();
+  let rows='';
+  for(let r=0;r<matrix.length;r++){
+    let cells='';
+    for(let c=0;c<matrix[r].length;c++){
+      const ref=colLetter(c)+(r+1); const v=matrix[r][c];
+      if(typeof v==='number' && isFinite(v)) cells+=`<c r="${ref}"><v>${v}</v></c>`;
+      else cells+=`<c r="${ref}" t="inlineStr"><is><t xml:space="preserve">${escXml(v)}</t></is></c>`;
+    }
+    rows+=`<row r="${r+1}">${cells}</row>`;
+  }
+  const xml=`<?xml version="1.0" encoding="UTF-8" standalone="yes"?>\n<worksheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main"><sheetData>${rows}</sheetData></worksheet>`;
+  return enc.encode(xml);
+}
+function rowsToMatrix(rows){
+  if(!rows||rows.length===0) return [['(nessun dato)']];
+  const headers=Object.keys(rows[0]);
+  const m=[headers];
+  rows.forEach(o=>m.push(headers.map(h=>{const v=o[h]; return (v===null||v===undefined)?'':v;})));
+  return m;
+}
+
+function handleExportExcel(){
+  try{
+    const enc=new TextEncoder();
+    // Dati fogli (come originale, senza foglio di sistema)
+    const dPN=[...movimenti].sort((a,b)=>new Date(a.data)-new Date(b.data)).map(m=>({
+      "Data":new Date(m.data).toLocaleDateString('it-IT'),
+      "Tipo Operazione":m.tipo.replace('_',' '), "Descrizione":m.desc,
+      "Entrata (EUR)":m.tipo.includes('VERSAMENTO')?m.importo:0,
+      "Uscita (EUR)":m.tipo.includes('SPESA')?m.importo:0,
+      "Condomino":m.tipo.includes('VERSAMENTO')?(INITIAL_CONDOMINI.find(c=>c.id===m.condominoId)?.name||''):''
+    }));
+    const dR=calcoliCondomini.map(c=>{
+      let r={"Condomino":c.name,"Millesimi":c.millesimi,"Quota Ord. (EUR)":round2(c.quotaOrd2026)};
+      let vd=c.versamentiOrdDisponibili, qm=c.quotaOrd2026/12;
+      MESI.forEach(m=>{let p=0; if(vd>=qm){p=qm;vd-=qm;} else if(vd>0){p=vd;vd=0;} r[m+" (Da Pagare)"]=c.millesimi===0?0:round2(Math.max(0,qm-p));});
+      r["Totale Straord. Dovuto"]=round2(c.arretrati.cancello+c.arretrati.illuminazione+c.arretrati.pensiline+c.arretrati.citofoni+c.arretrati.fabbro+c.quotaStraord2026);
+      r["Straord. Residuo"]=round2(c.debitoResiduoStraord+c.residuoStraord2026-c.creditoStraord2026);
+      return r;
+    });
+    const dD=calcoliCondomini.map(c=>({
+      "Condomino":c.name,"Debito Ord. 25":round2(c.arretrati.ord),
+      "Debito Straord. 25":round2(c.arretrati.cancello+c.arretrati.illuminazione+c.arretrati.pensiline+c.arretrati.citofoni+c.arretrati.fabbro),
+      "Da Vers. Ord 26":round2(c.residuoOrd2026),"Da Vers. Straord 26":round2(c.residuoStraord2026),
+      "TOTALE DEBITO NETTO":round2(c.totaleDebitoAttuale)
+    }));
+    const tC=calcoliCondomini.reduce((s,c)=>s+(c.totaleDebitoAttuale>0?c.totaleDebitoAttuale:0),0);
+    const tD=calcoliCondomini.reduce((s,c)=>s+(c.totaleDebitoAttuale<0?Math.abs(c.totaleDebitoAttuale):0),0);
+    const avz=(disponibilitaAttuale.totale+tC)-(INITIAL_DEBITI_TERZI+tD);
+    const dP=[
+      {"Sezione":"ATTIVITA","Voce":"Poste","Importo":round2(disponibilitaAttuale.poste)},
+      {"Sezione":"ATTIVITA","Voce":"Cassa","Importo":round2(disponibilitaAttuale.cassa)},
+      {"Sezione":"ATTIVITA","Voce":"Fondo Pensiline","Importo":round2(disponibilitaAttuale.fondoPensiline)},
+      {"Sezione":"ATTIVITA","Voce":"Crediti v/Condomini","Importo":round2(tC)},
+      {"Sezione":"PASSIVITA","Voce":"Debiti v/Terzi","Importo":round2(INITIAL_DEBITI_TERZI)},
+      {"Sezione":"PASSIVITA","Voce":"Debiti v/Condomini","Importo":round2(tD)},
+      {"Sezione":"PASSIVITA","Voce":"Avanzo/Disavanzo","Importo":round2(avz)}
+    ];
+    const dDS=calcoliCondomini.map(c=>({
+      "Condomino":c.name,"Arr. Cancello":round2(c.arretrati.cancello),"Arr. Illuminazione":round2(c.arretrati.illuminazione),
+      "Arr. Pensiline":round2(c.arretrati.pensiline),"Arr. Citofoni":round2(c.arretrati.citofoni),"Arr. Fabbro":round2(c.arretrati.fabbro),
+      "Nuovi Lavori 26":round2(c.quotaStraord2026),"Saldo a Debito":round2(c.debitoResiduoStraord+c.residuoStraord2026-c.creditoStraord2026)
+    }));
+    const dL=vociPreventivoStraord.map(v=>({"Descrizione Lavoro":v.desc,"Importo Totale":v.importo}));
+
+    const sheets=[
+      {name:"1. Prima Nota", rows:dPN},
+      {name:"2. Preventivo e Rate", rows:dR},
+      {name:"3. Dettaglio", rows:dD},
+      {name:"4. Patrimonio", rows:dP},
+      {name:"5. Dettaglio Straord", rows:dDS},
+      {name:"6. Elenco Lavori", rows:dL}
+    ];
+
+    // Costruzione parti xlsx
+    const files=[];
+    let typesOverrides='', wbSheets='', wbRels='';
+    sheets.forEach((s,idx)=>{
+      const n=idx+1;
+      files.push({name:`xl/worksheets/sheet${n}.xml`, data:sheetXml(rowsToMatrix(s.rows))});
+      typesOverrides+=`<Override PartName="/xl/worksheets/sheet${n}.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.worksheet+xml"/>`;
+      wbSheets+=`<sheet name="${escXml(s.name)}" sheetId="${n}" r:id="rId${n}"/>`;
+      wbRels+=`<Relationship Id="rId${n}" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/worksheet" Target="worksheets/sheet${n}.xml"/>`;
+    });
+    const contentTypes=`<?xml version="1.0" encoding="UTF-8" standalone="yes"?>\n<Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types"><Default Extension="rels" ContentType="application/vnd.openxmlformats-package.relationships+xml"/><Default Extension="xml" ContentType="application/xml"/><Override PartName="/xl/workbook.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet.main+xml"/>${typesOverrides}</Types>`;
+    const rels=`<?xml version="1.0" encoding="UTF-8" standalone="yes"?>\n<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships"><Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument" Target="xl/workbook.xml"/></Relationships>`;
+    const workbook=`<?xml version="1.0" encoding="UTF-8" standalone="yes"?>\n<workbook xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships"><sheets>${wbSheets}</sheets></workbook>`;
+    const workbookRels=`<?xml version="1.0" encoding="UTF-8" standalone="yes"?>\n<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships">${wbRels}</Relationships>`;
+
+    // backup completo incorporato (per ripristino affidabile)
+    const backup=JSON.stringify({_app:'agora-condominio', _v:1, movimenti, vociPreventivoOrd, vociPreventivoStraord});
+
+    files.unshift({name:'[Content_Types].xml', data:enc.encode(contentTypes)});
+    files.push({name:'_rels/.rels', data:enc.encode(rels)});
+    files.push({name:'xl/workbook.xml', data:enc.encode(workbook)});
+    files.push({name:'xl/_rels/workbook.xml.rels', data:enc.encode(workbookRels)});
+    files.push({name:'agora_backup.json', data:enc.encode(backup)});
+
+    const zip=makeZip(files);
+    downloadBytes(zip, 'Condominio_Agora_Completo_2026.xlsx', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+    mostraAlert('File Excel scaricato!','success');
+  }catch(err){ console.error(err); mostraAlert('Errore export Excel.','error'); }
+}
+function round2(n){return Math.round((n+Number.EPSILON)*100)/100;}
+
+function handleImport(e){
+  const f=e.target.files[0]; if(!f) return;
+  const r=new FileReader();
+  r.onload=ev=>{
+    try{
+      const buf=ev.target.result;
+      const entry=readStoredEntry(buf,'agora_backup.json');
+      if(!entry){ mostraAlert("File non valido: usa un file esportato da questo programma.","error"); document.getElementById('fileImport').value=''; return; }
+      const data=JSON.parse(new TextDecoder().decode(entry));
+      if(Array.isArray(data.movimenti)) movimenti=data.movimenti;
+      if(Array.isArray(data.vociPreventivoOrd)) vociPreventivoOrd=data.vociPreventivoOrd;
+      if(Array.isArray(data.vociPreventivoStraord)) vociPreventivoStraord=data.vociPreventivoStraord;
+      saveData(); recalculateState(); mostraAlert("Dati ripristinati dal file Excel!","success");
+    }catch(err){ console.error(err); mostraAlert("Errore importazione file.","error"); }
+    document.getElementById('fileImport').value='';
+  };
+  r.readAsArrayBuffer(f);
+}
+
+function downloadBytes(bytes, filename, mime){
+  const blob=new Blob([bytes],{type:mime||'application/octet-stream'});
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement('a'); a.href=url; a.download=filename;
+  document.body.appendChild(a); a.click();
+  setTimeout(()=>{URL.revokeObjectURL(url); a.remove();},1000);
+}
+
+/* close whatsapp menu on outside click */
+document.addEventListener('click',ev=>{
+  if(menuApertoId && !ev.target.closest('.wa-wrap')){
+    document.getElementById('menu-wa-'+menuApertoId)?.classList.add('hidden'); menuApertoId=null;
+  }
+});
+
+window.onload=initApp;
+</script>
+</body>
+</html>
