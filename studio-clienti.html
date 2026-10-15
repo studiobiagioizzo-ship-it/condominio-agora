@@ -1,0 +1,998 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Studio Commerciale - Gestione Clienti</title>
+<style>
+/* ===== RESET / BASE ===== */
+*{box-sizing:border-box;margin:0;padding:0;}
+:root{
+  --slate-900:#0f172a;--slate-800:#1e293b;--slate-700:#334155;--slate-600:#475569;
+  --slate-300:#cbd5e1;--slate-200:#e2e8f0;--slate-100:#f1f5f9;--slate-50:#f8fafc;
+  --blue-700:#1d4ed8;--blue-600:#2563eb;--blue-500:#3b82f6;--blue-400:#60a5fa;--blue-100:#dbeafe;--blue-50:#eff6ff;
+  --green-700:#15803d;--green-600:#16a34a;--green-100:#dcfce7;
+  --red-700:#b91c1c;--red-600:#dc2626;--red-100:#fee2e2;
+  --yellow-700:#a16207;--yellow-600:#ca8a04;--yellow-100:#fef9c3;
+  --purple-700:#7e22ce;--purple-100:#f3e8ff;
+  --gray-700:#374151;--gray-500:#6b7280;--gray-200:#e5e7eb;--gray-100:#f3f4f6;
+}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;background:var(--slate-100);color:#1f2937;line-height:1.45;font-size:14px;}
+.hidden{display:none!important;}
+.muted{color:var(--gray-500);font-size:12px;}
+.right{text-align:right;}.center{text-align:center;}.bold{font-weight:700;}
+.t-red{color:var(--red-600);}.t-green{color:var(--green-600);}.t-yellow{color:var(--yellow-700);}
+.nowrap{white-space:nowrap;}
+.scroll-x{overflow-x:auto;}
+
+/* ===== TOPBAR ===== */
+.topbar{background:var(--slate-800);color:#fff;box-shadow:0 2px 6px rgba(0,0,0,.15);}
+.topbar-inner{max-width:1240px;margin:0 auto;padding:16px;}
+.brand{margin-bottom:14px;}
+.brand h1{font-size:22px;font-weight:800;}
+.brand p{color:var(--slate-300);font-size:13px;margin-top:2px;}
+.tabs{display:flex;gap:8px;overflow-x:auto;padding-bottom:4px;}
+.tab-btn{background:var(--slate-700);color:#fff;border:none;padding:9px 14px;border-radius:7px;white-space:nowrap;cursor:pointer;font-size:14px;}
+.tab-btn:hover{background:var(--slate-600);}
+.tab-btn.active{background:var(--blue-500);font-weight:600;}
+.tab-btn .badge{margin-left:6px;}
+
+/* ===== BUTTONS ===== */
+.btn{border:none;border-radius:7px;padding:9px 14px;display:inline-flex;align-items:center;gap:6px;cursor:pointer;font-size:14px;font-weight:500;color:#fff;background:var(--blue-600);}
+.btn:hover{filter:brightness(1.08);}
+.btn-sm{padding:5px 9px;font-size:12px;border-radius:6px;}
+.btn-green{background:var(--green-600);}
+.btn-red{background:var(--red-600);}
+.btn-slate{background:var(--slate-600);}
+.btn-light{background:var(--gray-200);color:var(--gray-700);}
+.btn-row{display:flex;gap:8px;flex-wrap:wrap;align-items:center;}
+
+/* ===== LAYOUT ===== */
+.container{max-width:1240px;margin:0 auto;padding:22px 16px;}
+.tab-content{display:none;}
+.tab-content.active{display:block;}
+.stack>*+*{margin-top:20px;}
+.card{background:#fff;border-radius:10px;box-shadow:0 1px 3px rgba(0,0,0,.08);padding:18px;}
+.card h2{font-size:17px;margin-bottom:12px;}
+.card-head{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;margin-bottom:14px;}
+.card-head h2{margin:0;}
+.grid-kpi{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:14px;}
+.kpi{background:#fff;border-radius:10px;padding:14px 16px;box-shadow:0 1px 3px rgba(0,0,0,.08);border-left:4px solid var(--blue-500);}
+.kpi .lbl{font-size:12px;color:var(--gray-500);text-transform:uppercase;letter-spacing:.03em;}
+.kpi .val{font-size:24px;font-weight:800;margin-top:4px;}
+.kpi.red{border-color:var(--red-600);}.kpi.yellow{border-color:var(--yellow-600);}.kpi.green{border-color:var(--green-600);}.kpi.purple{border-color:var(--purple-700);}
+.grid-2{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(380px,100%),1fr));gap:20px;}
+.grid-2>*{min-width:0;}
+
+/* ===== FILTERS / FORMS ===== */
+.filters{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px;}
+input,select,textarea{font:inherit;padding:8px 10px;border:1px solid var(--slate-300);border-radius:7px;background:#fff;color:inherit;}
+input:focus,select:focus,textarea:focus{outline:2px solid var(--blue-400);outline-offset:-1px;}
+.filters input[type=search]{flex:1;min-width:200px;}
+.form-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;}
+.form-grid .full{grid-column:1/-1;}
+.field label{display:block;font-size:12px;font-weight:600;color:var(--gray-700);margin-bottom:4px;}
+.field input,.field select,.field textarea{width:100%;}
+.field .warn{color:var(--red-600);font-size:11px;margin-top:3px;}
+.checks{display:flex;flex-wrap:wrap;gap:6px 16px;}
+.checks label{font-weight:400;display:flex;align-items:center;gap:6px;font-size:13px;}
+fieldset{border:1px solid var(--gray-200);border-radius:8px;padding:12px;}
+legend{font-size:13px;font-weight:700;padding:0 6px;color:var(--slate-700);}
+
+/* ===== TABLES ===== */
+table{width:100%;border-collapse:collapse;font-size:13px;}
+th{background:var(--slate-50);text-align:left;font-size:12px;color:var(--slate-600);text-transform:uppercase;letter-spacing:.03em;padding:8px;border-bottom:2px solid var(--slate-200);white-space:nowrap;}
+td{padding:8px;border-bottom:1px solid var(--gray-100);vertical-align:middle;}
+tr:hover td{background:var(--slate-50);}
+tr.done td{color:var(--gray-500);}
+tr.done td.desc{text-decoration:line-through;}
+tfoot td{font-weight:700;background:var(--slate-50);}
+.empty{padding:22px;text-align:center;color:var(--gray-500);}
+a.lnk{color:var(--blue-700);cursor:pointer;text-decoration:none;font-weight:600;}
+a.lnk:hover{text-decoration:underline;}
+
+.badge{display:inline-block;padding:2px 8px;border-radius:999px;font-size:11px;font-weight:600;white-space:nowrap;}
+.b-blue{background:var(--blue-100);color:var(--blue-700);}
+.b-green{background:var(--green-100);color:var(--green-700);}
+.b-red{background:var(--red-100);color:var(--red-700);}
+.b-yellow{background:var(--yellow-100);color:var(--yellow-700);}
+.b-purple{background:var(--purple-100);color:var(--purple-700);}
+.b-gray{background:var(--gray-200);color:var(--gray-700);}
+
+/* ===== MODAL ===== */
+.modal-bg{position:fixed;inset:0;background:rgba(15,23,42,.55);display:flex;align-items:flex-start;justify-content:center;padding:30px 12px;overflow-y:auto;z-index:50;}
+.modal{background:#fff;border-radius:12px;width:100%;max-width:860px;box-shadow:0 20px 50px rgba(0,0,0,.3);}
+.modal-head{display:flex;justify-content:space-between;align-items:center;padding:16px 18px;border-bottom:1px solid var(--gray-200);}
+.modal-head h3{font-size:18px;}
+.modal-body{padding:18px;}
+.modal-foot{display:flex;justify-content:flex-end;gap:8px;padding:14px 18px;border-top:1px solid var(--gray-200);}
+.x{background:none;border:none;font-size:24px;cursor:pointer;color:var(--gray-500);line-height:1;}
+.info-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:8px 18px;margin-bottom:14px;}
+.info-grid div span{display:block;font-size:11px;color:var(--gray-500);text-transform:uppercase;}
+.sub-tabs{display:flex;gap:6px;margin:16px 0 10px;border-bottom:1px solid var(--gray-200);}
+.sub-tabs button{background:none;border:none;padding:8px 12px;cursor:pointer;font:inherit;color:var(--gray-500);border-bottom:2px solid transparent;}
+.sub-tabs button.active{color:var(--blue-700);border-color:var(--blue-600);font-weight:600;}
+.diario-item{border-left:3px solid var(--blue-400);padding:6px 10px;margin-bottom:8px;background:var(--slate-50);border-radius:0 6px 6px 0;}
+
+/* ===== TOAST ===== */
+#toast{position:fixed;bottom:20px;right:20px;padding:12px 16px;border-radius:8px;color:#fff;font-weight:500;box-shadow:0 6px 20px rgba(0,0,0,.2);z-index:100;transition:opacity .3s;}
+#toast.ok{background:var(--green-600);}#toast.err{background:var(--red-600);}
+
+/* ===== PRINT ===== */
+#printArea{display:none;}
+@media print{
+  body{background:#fff;}
+  body>*:not(#printArea){display:none!important;}
+  #printArea{display:block;padding:10mm;font-size:12px;}
+  #printArea table td,#printArea table th{border:1px solid #999;}
+}
+@media (max-width:600px){
+  .grid-2{grid-template-columns:1fr;}
+  .kpi .val{font-size:20px;}
+}
+</style>
+</head>
+<body>
+
+<header class="topbar">
+  <div class="topbar-inner">
+    <div class="brand">
+      <h1 id="brandName">Studio Commerciale</h1>
+      <p>Gestione clienti, scadenze fiscali e parcelle — i dati restano salvati in questo browser</p>
+    </div>
+    <nav class="tabs">
+      <button class="tab-btn active" data-tab="dashboard">Cruscotto</button>
+      <button class="tab-btn" data-tab="clienti">Clienti</button>
+      <button class="tab-btn" data-tab="scadenze">Scadenze <span id="tabBadgeScad" class="badge b-red hidden"></span></button>
+      <button class="tab-btn" data-tab="parcelle">Parcelle</button>
+      <button class="tab-btn" data-tab="impostazioni">Impostazioni e backup</button>
+    </nav>
+  </div>
+</header>
+
+<main class="container">
+
+  <!-- ===== CRUSCOTTO ===== -->
+  <section id="tab-dashboard" class="tab-content active stack">
+    <div class="grid-kpi" id="kpi"></div>
+    <div class="grid-2">
+      <div class="card">
+        <div class="card-head"><h2>Scadenze da gestire (scadute e prossimi 30 giorni)</h2></div>
+        <div class="scroll-x" id="dashScadenze"></div>
+      </div>
+      <div class="card">
+        <div class="card-head"><h2>Parcelle da incassare</h2></div>
+        <div class="scroll-x" id="dashParcelle"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== CLIENTI ===== -->
+  <section id="tab-clienti" class="tab-content">
+    <div class="card">
+      <div class="card-head">
+        <h2>Anagrafica clienti</h2>
+        <div class="btn-row">
+          <button class="btn btn-slate btn-sm" onclick="esportaClientiCSV()">Esporta CSV</button>
+          <button class="btn" onclick="apriFormCliente()">+ Nuovo cliente</button>
+        </div>
+      </div>
+      <div class="filters">
+        <input type="search" id="fCliTesto" placeholder="Cerca per nome, CF, P.IVA, comune, referente…" oninput="renderClienti()">
+        <select id="fCliTipo" onchange="renderClienti()"><option value="">Tutte le tipologie</option></select>
+        <select id="fCliRegime" onchange="renderClienti()"><option value="">Tutti i regimi</option></select>
+        <select id="fCliStato" onchange="renderClienti()">
+          <option value="attivo">Solo attivi</option><option value="cessato">Solo cessati</option><option value="">Tutti</option>
+        </select>
+      </div>
+      <div class="scroll-x" id="tabClienti"></div>
+    </div>
+  </section>
+
+  <!-- ===== SCADENZE ===== -->
+  <section id="tab-scadenze" class="tab-content">
+    <div class="card">
+      <div class="card-head">
+        <h2>Scadenzario adempimenti</h2>
+        <div class="btn-row">
+          <button class="btn btn-green" onclick="apriGeneraScadenze()">Genera scadenze dell'anno</button>
+          <button class="btn" onclick="apriFormScadenza()">+ Nuova scadenza</button>
+        </div>
+      </div>
+      <div class="filters">
+        <select id="fScadCliente" onchange="renderScadenze()"><option value="">Tutti i clienti</option></select>
+        <select id="fScadPeriodo" onchange="renderScadenze()">
+          <option value="aperte">Da fare (tutte)</option>
+          <option value="scadute">Scadute non svolte</option>
+          <option value="30">Prossimi 30 giorni</option>
+          <option value="mese">Questo mese</option>
+          <option value="fatte">Già svolte</option>
+          <option value="tutte">Tutte</option>
+        </select>
+        <select id="fScadCat" onchange="renderScadenze()"><option value="">Tutte le categorie</option></select>
+        <select id="fScadAnno" onchange="renderScadenze()"></select>
+      </div>
+      <div class="scroll-x" id="tabScadenze"></div>
+      <p class="muted" style="margin-top:10px">Le date generate in automatico seguono il calendario fiscale ordinario (con slittamento a sabato, domenica e festivi). Verifica sempre eventuali proroghe di legge.</p>
+    </div>
+  </section>
+
+  <!-- ===== PARCELLE ===== -->
+  <section id="tab-parcelle" class="tab-content stack">
+    <div class="grid-kpi" id="kpiParcelle"></div>
+    <div class="card">
+      <div class="card-head">
+        <h2>Parcelle e fatture</h2>
+        <div class="btn-row">
+          <button class="btn btn-slate btn-sm" onclick="esportaParcelleCSV()">Esporta CSV</button>
+          <button class="btn btn-green btn-sm" onclick="generaParcelleOnorari()">Parcelle da onorari annui</button>
+          <button class="btn" onclick="apriFormParcella()">+ Nuova parcella</button>
+        </div>
+      </div>
+      <div class="filters">
+        <select id="fParCliente" onchange="renderParcelle()"><option value="">Tutti i clienti</option></select>
+        <select id="fParAnno" onchange="renderParcelle()"></select>
+        <select id="fParStato" onchange="renderParcelle()">
+          <option value="">Tutte</option><option value="aperta">Da incassare</option><option value="pagata">Incassate</option>
+        </select>
+      </div>
+      <div class="scroll-x" id="tabParcelle"></div>
+    </div>
+  </section>
+
+  <!-- ===== IMPOSTAZIONI ===== -->
+  <section id="tab-impostazioni" class="tab-content stack">
+    <div class="card">
+      <h2>Dati dello studio e parametri di calcolo</h2>
+      <div class="form-grid">
+        <div class="field full"><label>Nome dello studio</label><input id="impNome"></div>
+        <div class="field full"><label>Intestazione per le stampe (indirizzo, CF/P.IVA, contatti)</label><textarea id="impIntest" rows="2"></textarea></div>
+        <div class="field"><label>Contributo integrativo cassa (%)</label><input id="impCassa" type="number" step="0.01"></div>
+        <div class="field"><label>Aliquota IVA (%)</label><input id="impIva" type="number" step="0.01"></div>
+        <div class="field"><label>Ritenuta d'acconto (%)</label><input id="impRit" type="number" step="0.01"></div>
+        <div class="field"><label>Rate onorario annuo</label>
+          <select id="impRate"><option value="1">Annuale</option><option value="2">Semestrale</option><option value="4">Trimestrale</option><option value="12">Mensile</option></select>
+        </div>
+      </div>
+      <div class="btn-row" style="margin-top:14px"><button class="btn" onclick="salvaImpostazioni()">Salva impostazioni</button></div>
+    </div>
+    <div class="card">
+      <h2>Backup e ripristino</h2>
+      <p class="muted" style="margin-bottom:12px">I dati sono salvati solo in questo browser. Esporta regolarmente un backup e conservalo al sicuro: contiene dati personali dei clienti.</p>
+      <div class="btn-row">
+        <button class="btn btn-green" onclick="esportaBackup()">Scarica backup (JSON)</button>
+        <label class="btn btn-slate" style="cursor:pointer">Ripristina da backup<input type="file" id="fileImport" accept=".json,application/json" class="hidden" onchange="importaBackup(event)"></label>
+        <button class="btn btn-light" onclick="caricaEsempio()">Carica dati di esempio</button>
+        <button class="btn btn-red" onclick="cancellaTutto()">Cancella tutti i dati</button>
+      </div>
+    </div>
+  </section>
+</main>
+
+<div id="modalRoot"></div>
+<div id="printArea"></div>
+<div id="toast" class="hidden"></div>
+
+<script>
+/* ======================= COSTANTI ======================= */
+const TIPI = {
+  pf:'Persona fisica (privato)', ditta:'Ditta individuale', prof:'Libero professionista',
+  sdp:'Società di persone', sdc:'Società di capitali', ente:'Ente / Associazione'
+};
+const REGIMI = { ordinario:'Ordinario', semplificato:'Semplificato', forfettario:'Forfettario', nessuno:'Nessuno (privato)' };
+const SERVIZI = {
+  contabilita:'Tenuta contabilità', iva:'Liquidazioni IVA', redditi:'Dichiarazione dei redditi',
+  paghe:'Paghe e contributi', dich730:'Modello 730', imu:'IMU', bilancio:"Bilancio d'esercizio", consulenza:'Consulenza'
+};
+const CATEGORIE = { iva:'IVA', redditi:'Redditi', paghe:'Paghe', dich730:'730', imu:'IMU', bilancio:'Bilancio', cciaa:'Camera di Commercio', altro:'Altro' };
+const CAT_BADGE = { iva:'b-blue', redditi:'b-purple', paghe:'b-yellow', dich730:'b-green', imu:'b-gray', bilancio:'b-purple', cciaa:'b-gray', altro:'b-gray' };
+const MESI = ['gennaio','febbraio','marzo','aprile','maggio','giugno','luglio','agosto','settembre','ottobre','novembre','dicembre'];
+
+/* ======================= STATO ======================= */
+function load(key, def){ try{ const v=JSON.parse(localStorage.getItem(key)); return v ?? def; }catch(e){ return def; } }
+let clienti   = load('studio_clienti', []);
+let scadenze  = load('studio_scadenze', []);
+let parcelle  = load('studio_parcelle', []);
+let impost    = Object.assign({nome:'Studio Commerciale', intest:'', cassa:4, iva:22, rit:20, rate:1}, load('studio_impostazioni', {}));
+
+function saveData(){
+  try{
+    localStorage.setItem('studio_clienti', JSON.stringify(clienti));
+    localStorage.setItem('studio_scadenze', JSON.stringify(scadenze));
+    localStorage.setItem('studio_parcelle', JSON.stringify(parcelle));
+    localStorage.setItem('studio_impostazioni', JSON.stringify(impost));
+  }catch(e){ toast('Impossibile salvare i dati nel browser: esporta un backup.', 'err'); }
+}
+
+/* ======================= UTILITY ======================= */
+const uid = () => Date.now().toString(36) + Math.random().toString(36).slice(2,8);
+const $ = id => document.getElementById(id);
+function esc(s){ return String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+const euro = n => (Number(n)||0).toLocaleString('it-IT',{style:'currency',currency:'EUR'});
+const round2 = n => Math.round((Number(n)||0)*100)/100;
+function iso(d){ return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0'); }
+function parseIso(s){ const [y,m,d]=s.split('-').map(Number); return new Date(y,m-1,d); }
+function fmtData(s){ if(!s) return ''; const [y,m,d]=s.split('-'); return d+'/'+m+'/'+y; }
+const oggi = () => iso(new Date());
+function giorniDa(s){ return Math.round((parseIso(s) - parseIso(oggi()))/86400000); }
+function nomeCliente(id){ return clienti.find(c=>c.id===id)?.denominazione || '(cliente eliminato)'; }
+
+function toast(msg, tipo='ok'){
+  const t=$('toast'); t.textContent=msg; t.className=tipo; clearTimeout(t._h);
+  t._h=setTimeout(()=>t.classList.add('hidden'), 3000);
+}
+
+function download(contenuto, nome, mime){
+  const blob=new Blob([contenuto],{type:mime});
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement('a'); a.href=url; a.download=nome;
+  document.body.appendChild(a); a.click();
+  setTimeout(()=>{URL.revokeObjectURL(url); a.remove();},1000);
+}
+function toCSV(righe){
+  return '﻿' + righe.map(r => r.map(v => {
+    const s=String(v ?? ''); return /[;"\n]/.test(s) ? '"'+s.replace(/"/g,'""')+'"' : s;
+  }).join(';')).join('\r\n');
+}
+
+/* ===== Validazione codice fiscale e partita IVA ===== */
+function validaPIVA(p){
+  if(!/^\d{11}$/.test(p)) return false;
+  let s=0;
+  for(let i=0;i<11;i++){ let n=+p[i]; if(i%2===1){ n*=2; if(n>9) n-=9; } s+=n; }
+  return s%10===0;
+}
+function validaCF(cf){
+  cf=cf.toUpperCase();
+  if(/^\d{11}$/.test(cf)) return validaPIVA(cf);
+  if(!/^[A-Z0-9]{16}$/.test(cf)) return false;
+  const dispari={0:1,1:0,2:5,3:7,4:9,5:13,6:15,7:17,8:19,9:21,A:1,B:0,C:5,D:7,E:9,F:13,G:15,H:17,I:19,J:21,K:2,L:4,M:18,N:20,O:11,P:3,Q:6,R:8,S:12,T:14,U:16,V:10,W:22,X:25,Y:24,Z:23};
+  let s=0;
+  for(let i=0;i<15;i++){
+    const c=cf[i];
+    if(i%2===0) s+=dispari[c];
+    else s+= /\d/.test(c) ? +c : c.charCodeAt(0)-65;
+  }
+  return String.fromCharCode(65 + s%26) === cf[15];
+}
+
+/* ===== Calendario: festività e slittamento scadenze ===== */
+function pasqua(y){
+  const a=y%19,b=Math.floor(y/100),c=y%100,d=Math.floor(b/4),e=b%4,f=Math.floor((b+8)/25),g=Math.floor((b-f+1)/3),
+        h=(19*a+b-d-g+15)%30,i=Math.floor(c/4),k=c%4,l=(32+2*e+2*i-h-k)%7,m=Math.floor((a+11*h+22*l)/451),
+        mese=Math.floor((h+l-7*m+114)/31),giorno=((h+l-7*m+114)%31)+1;
+  return new Date(y,mese-1,giorno);
+}
+function festivo(d){
+  const y=d.getFullYear(), md=(d.getMonth()+1)+'-'+d.getDate();
+  if(['1-1','1-6','4-25','5-1','6-2','8-15','11-1','12-8','12-25','12-26'].includes(md)) return true;
+  const pm=pasqua(y); pm.setDate(pm.getDate()+1);
+  return d.getMonth()===pm.getMonth() && d.getDate()===pm.getDate();
+}
+function lavorativo(y,m,g){
+  const d=new Date(y,m-1,g);
+  while(d.getDay()===0 || d.getDay()===6 || festivo(d)) d.setDate(d.getDate()+1);
+  return iso(d);
+}
+const fineMese = (y,m) => new Date(y,m,0).getDate();
+
+/* ======================= GENERAZIONE SCADENZE ======================= */
+function scadenzePerCliente(c, Y){
+  const out=[], S=new Set(c.servizi||[]);
+  const add=(m,g,descr,cat)=>out.push({data:lavorativo(Y,m,g), descrizione:descr, categoria:cat});
+  const impresa = ['ditta','prof','sdp','sdc'].includes(c.tipo);
+  const societa = ['sdp','sdc'].includes(c.tipo);
+
+  if(S.has('iva') && impresa && c.regime!=='forfettario'){
+    if(c.periodicitaIva==='trimestrale'){
+      add(5,16,'Versamento IVA I trimestre '+Y,'iva');
+      add(8,20,'Versamento IVA II trimestre '+Y,'iva');
+      add(11,16,'Versamento IVA III trimestre '+Y,'iva');
+    }else{
+      add(1,16,'Versamento IVA dicembre '+(Y-1),'iva');
+      for(let m=2;m<=12;m++) add(m,16,'Versamento IVA '+MESI[m-2]+' '+Y,'iva');
+    }
+    add(3,16,'Versamento saldo IVA annuale '+(Y-1),'iva');
+    add(2,fineMese(Y,2),'Comunicazione LIPE IV trimestre '+(Y-1),'iva');
+    add(4,30,'Invio dichiarazione IVA '+(Y-1),'iva');
+    add(5,31,'Comunicazione LIPE I trimestre '+Y,'iva');
+    add(9,30,'Comunicazione LIPE II trimestre '+Y,'iva');
+    add(11,30,'Comunicazione LIPE III trimestre '+Y,'iva');
+    add(12,27,'Versamento acconto IVA '+Y,'iva');
+  }
+  if(S.has('redditi')){
+    const imposte = c.regime==='forfettario' ? 'imposta sostitutiva' : (societa ? 'imposte (Redditi/IRAP)' : 'imposte');
+    add(6,30,'Versamento saldo '+(Y-1)+' e 1° acconto '+Y+' '+imposte,'redditi');
+    add(10,31,'Invio dichiarazione dei redditi'+(societa&&c.regime!=='forfettario'?' e IRAP':'')+' '+(Y-1),'redditi');
+    add(11,30,'Versamento 2° acconto '+Y+' '+imposte,'redditi');
+    if(impresa && c.tipo!=='prof') add(6,30,'Versamento diritto annuale Camera di Commercio '+Y,'cciaa');
+  }
+  if(S.has('paghe')){
+    for(let m=1;m<=12;m++) add(m,16,'F24 ritenute e contributi dipendenti ('+MESI[(m+10)%12]+')','paghe');
+    add(3,16,'Invio Certificazioni Uniche '+(Y-1),'paghe');
+    add(10,31,'Invio modello 770 '+(Y-1),'paghe');
+  }
+  if(S.has('dich730')) add(9,30,'Invio modello 730/'+Y+' (redditi '+(Y-1)+')','dich730');
+  if(S.has('imu')){
+    add(6,16,'Versamento acconto IMU '+Y,'imu');
+    add(12,16,'Versamento saldo IMU '+Y,'imu');
+  }
+  if(S.has('bilancio') && c.tipo==='sdc'){
+    add(4,30,'Approvazione bilancio '+(Y-1)+' (termine 120 giorni)','bilancio');
+    add(5,30,'Deposito bilancio '+(Y-1)+' al Registro Imprese','bilancio');
+  }
+  return out;
+}
+
+function generaScadenze(Y, clienteId){
+  const target = clienteId ? clienti.filter(c=>c.id===clienteId) : clienti.filter(c=>c.stato!=='cessato');
+  const esistenti = new Set(scadenze.map(s=>s.clienteId+'|'+s.data+'|'+s.descrizione));
+  let n=0;
+  target.forEach(c => scadenzePerCliente(c,Y).forEach(s => {
+    const k=c.id+'|'+s.data+'|'+s.descrizione;
+    if(esistenti.has(k)) return;
+    esistenti.add(k);
+    scadenze.push({id:uid(), clienteId:c.id, ...s, fatta:false, note:'', auto:true});
+    n++;
+  }));
+  return n;
+}
+
+/* ======================= CALCOLI PARCELLE ======================= */
+function calcolaParcella(p){
+  const imp=Number(p.imponibile)||0;
+  const cassa=round2(imp*(Number(p.cassaPerc)||0)/100);
+  const base=imp+cassa;
+  const iva=round2(base*(Number(p.ivaPerc)||0)/100);
+  const spese=Number(p.speseEscluse)||0;
+  const totale=round2(base+iva+spese);
+  const ritenuta = p.ritenuta ? round2(imp*(Number(p.ritenutaPerc)||0)/100) : 0;
+  return {imp, cassa, iva, spese, totale, ritenuta, netto:round2(totale-ritenuta)};
+}
+// la ritenuta d'acconto si applica se il cliente è sostituto d'imposta
+const sostitutoImposta = c => c && !['pf'].includes(c.tipo) && c.regime!=='forfettario';
+
+function prossimoNumero(anno){
+  const nums=parcelle.filter(p=>p.data?.startsWith(anno)).map(p=>parseInt(p.numero)||0);
+  return (nums.length?Math.max(...nums):0)+1;
+}
+
+/* ======================= TAB ======================= */
+document.querySelectorAll('.tab-btn').forEach(b => b.addEventListener('click', () => mostraTab(b.dataset.tab)));
+function mostraTab(t){
+  document.querySelectorAll('.tab-btn').forEach(b=>b.classList.toggle('active', b.dataset.tab===t));
+  document.querySelectorAll('.tab-content').forEach(s=>s.classList.toggle('active', s.id==='tab-'+t));
+  if(t==='impostazioni') renderImpostazioni();
+}
+
+function renderAll(){
+  $('brandName').textContent = impost.nome || 'Studio Commerciale';
+  aggiornaFiltri();
+  renderDashboard(); renderClienti(); renderScadenze(); renderParcelle();
+}
+
+function aggiornaFiltri(){
+  const opts = (sel, prima, coppie) => {
+    const el=$(sel), v=el.value;
+    el.innerHTML = prima + coppie.map(([k,l])=>`<option value="${esc(k)}">${esc(l)}</option>`).join('');
+    if([...el.options].some(o=>o.value===v)) el.value=v;
+  };
+  const cliOrd = [...clienti].sort((a,b)=>a.denominazione.localeCompare(b.denominazione)).map(c=>[c.id,c.denominazione]);
+  opts('fCliTipo','<option value="">Tutte le tipologie</option>',Object.entries(TIPI));
+  opts('fCliRegime','<option value="">Tutti i regimi</option>',Object.entries(REGIMI));
+  opts('fScadCliente','<option value="">Tutti i clienti</option>',cliOrd);
+  opts('fParCliente','<option value="">Tutti i clienti</option>',cliOrd);
+  opts('fScadCat','<option value="">Tutte le categorie</option>',Object.entries(CATEGORIE));
+  const anniS=new Set([new Date().getFullYear()]); scadenze.forEach(s=>anniS.add(+s.data.slice(0,4)));
+  const anniP=new Set([new Date().getFullYear()]); parcelle.forEach(p=>anniP.add(+p.data.slice(0,4)));
+  opts('fScadAnno','<option value="">Tutti gli anni</option>',[...anniS].sort((a,b)=>b-a).map(y=>[y,y]));
+  opts('fParAnno','<option value="">Tutti gli anni</option>',[...anniP].sort((a,b)=>b-a).map(y=>[y,y]));
+}
+
+/* ======================= CRUSCOTTO ======================= */
+function renderDashboard(){
+  const attivi=clienti.filter(c=>c.stato!=='cessato');
+  const aperte=scadenze.filter(s=>!s.fatta);
+  const scadute=aperte.filter(s=>giorniDa(s.data)<0);
+  const prossime=aperte.filter(s=>{const g=giorniDa(s.data); return g>=0 && g<=30;});
+  const daIncassare=parcelle.filter(p=>!p.pagata);
+  const crediti=daIncassare.reduce((t,p)=>t+calcolaParcella(p).netto,0);
+  const onorari=attivi.reduce((t,c)=>t+(Number(c.onorario)||0),0);
+
+  $('kpi').innerHTML = `
+    <div class="kpi"><div class="lbl">Clienti attivi</div><div class="val">${attivi.length}</div></div>
+    <div class="kpi purple"><div class="lbl">Onorari annui pattuiti</div><div class="val">${euro(onorari)}</div></div>
+    <div class="kpi red"><div class="lbl">Scadenze scadute</div><div class="val">${scadute.length}</div></div>
+    <div class="kpi yellow"><div class="lbl">Scadenze prossimi 30 gg</div><div class="val">${prossime.length}</div></div>
+    <div class="kpi green"><div class="lbl">Crediti da incassare</div><div class="val">${euro(crediti)}</div></div>`;
+
+  const b=$('tabBadgeScad'); b.textContent=scadute.length; b.classList.toggle('hidden', !scadute.length);
+
+  const lista=[...scadute,...prossime].sort((a,b)=>a.data.localeCompare(b.data)).slice(0,25);
+  $('dashScadenze').innerHTML = lista.length ? `<table><thead><tr><th>Data</th><th>Cliente</th><th>Adempimento</th><th></th></tr></thead><tbody>
+    ${lista.map(s=>`<tr><td class="nowrap">${badgeData(s)}</td><td><a class="lnk" onclick="apriSchedaCliente('${s.clienteId}')">${esc(nomeCliente(s.clienteId))}</a></td>
+      <td>${esc(s.descrizione)}</td><td><button class="btn btn-green btn-sm" onclick="toggleScadenza('${s.id}')">Fatto</button></td></tr>`).join('')}
+    </tbody></table>` : '<div class="empty">Nessuna scadenza urgente.</div>';
+
+  const lp=[...daIncassare].sort((a,b)=>a.data.localeCompare(b.data)).slice(0,25);
+  $('dashParcelle').innerHTML = lp.length ? `<table><thead><tr><th>N.</th><th>Data</th><th>Cliente</th><th class="right">Netto</th><th class="right">Giorni</th></tr></thead><tbody>
+    ${lp.map(p=>{const g=-giorniDa(p.data); return `<tr><td>${esc(p.numero)}</td><td>${fmtData(p.data)}</td>
+      <td><a class="lnk" onclick="apriSchedaCliente('${p.clienteId}')">${esc(nomeCliente(p.clienteId))}</a></td>
+      <td class="right">${euro(calcolaParcella(p).netto)}</td><td class="right ${g>60?'t-red bold':''}">${g}</td></tr>`;}).join('')}
+    </tbody></table>` : '<div class="empty">Nessuna parcella da incassare.</div>';
+}
+
+function badgeData(s){
+  if(s.fatta) return `<span class="badge b-green">${fmtData(s.data)}</span>`;
+  const g=giorniDa(s.data);
+  const cls = g<0 ? 'b-red' : g<=7 ? 'b-yellow' : 'b-blue';
+  const tip = g<0 ? `scaduta da ${-g} gg` : g===0 ? 'oggi' : `tra ${g} gg`;
+  return `<span class="badge ${cls}" title="${tip}">${fmtData(s.data)}</span> <span class="muted">${tip}</span>`;
+}
+
+/* ======================= CLIENTI ======================= */
+function renderClienti(){
+  const q=$('fCliTesto').value.trim().toLowerCase(), tipo=$('fCliTipo').value, reg=$('fCliRegime').value, stato=$('fCliStato').value;
+  const lista=clienti.filter(c=>{
+    if(tipo && c.tipo!==tipo) return false;
+    if(reg && c.regime!==reg) return false;
+    if(stato && (c.stato||'attivo')!==stato) return false;
+    if(q && ![c.denominazione,c.cf,c.piva,c.comune,c.referente,c.email].some(v=>(v||'').toLowerCase().includes(q))) return false;
+    return true;
+  }).sort((a,b)=>a.denominazione.localeCompare(b.denominazione));
+
+  if(!lista.length){ $('tabClienti').innerHTML='<div class="empty">Nessun cliente trovato. Usa «+ Nuovo cliente» per iniziare, oppure carica i dati di esempio da Impostazioni.</div>'; return; }
+  $('tabClienti').innerHTML=`<table><thead><tr><th>Cliente</th><th>Tipologia</th><th>CF / P.IVA</th><th>Regime</th><th>Contatti</th><th class="right">Onorario annuo</th><th>Scadenze aperte</th><th></th></tr></thead><tbody>
+  ${lista.map(c=>{
+    const ap=scadenze.filter(s=>s.clienteId===c.id && !s.fatta);
+    const sc=ap.filter(s=>giorniDa(s.data)<0).length;
+    return `<tr>
+      <td><a class="lnk" onclick="apriSchedaCliente('${c.id}')">${esc(c.denominazione)}</a>${c.stato==='cessato'?' <span class="badge b-gray">cessato</span>':''}
+        <div class="muted">${esc([c.comune,c.prov&&'('+c.prov+')'].filter(Boolean).join(' '))}</div></td>
+      <td>${esc(TIPI[c.tipo]||'')}</td>
+      <td class="nowrap">${esc(c.cf||'')}${c.piva&&c.piva!==c.cf?'<div class="muted">P.IVA '+esc(c.piva)+'</div>':''}</td>
+      <td>${esc(REGIMI[c.regime]||'')}</td>
+      <td>${esc(c.tel||'')}<div class="muted">${esc(c.email||c.pec||'')}</div></td>
+      <td class="right">${c.onorario?euro(c.onorario):''}</td>
+      <td>${ap.length?`<span class="badge ${sc?'b-red':'b-blue'}">${ap.length}${sc?' · '+sc+' scadute':''}</span>`:'<span class="muted">—</span>'}</td>
+      <td class="nowrap right"><button class="btn btn-light btn-sm" onclick="apriFormCliente('${c.id}')">Modifica</button></td>
+    </tr>`;}).join('')}
+  </tbody></table>`;
+}
+
+function apriFormCliente(id){
+  const c = id ? clienti.find(x=>x.id===id) : {tipo:'ditta', regime:'semplificato', periodicitaIva:'trimestrale', stato:'attivo', servizi:['contabilita','iva','redditi'], inizioMandato:oggi()};
+  const sel=(obj,v)=>Object.entries(obj).map(([k,l])=>`<option value="${k}" ${k===v?'selected':''}>${esc(l)}</option>`).join('');
+  const f=(k,lbl,attr='')=>`<div class="field"><label>${lbl}</label><input id="c_${k}" value="${esc(c[k]??'')}" ${attr}></div>`;
+  apriModal(id?'Modifica cliente':'Nuovo cliente', `
+    <div class="stack">
+    <fieldset><legend>Anagrafica</legend><div class="form-grid">
+      <div class="field full"><label>Denominazione / Cognome e nome *</label><input id="c_denominazione" value="${esc(c.denominazione||'')}"></div>
+      <div class="field"><label>Tipologia</label><select id="c_tipo">${sel(TIPI,c.tipo)}</select></div>
+      <div class="field"><label>Regime fiscale</label><select id="c_regime">${sel(REGIMI,c.regime)}</select></div>
+      <div class="field"><label>Codice fiscale</label><input id="c_cf" value="${esc(c.cf||'')}" oninput="checkCF()" style="text-transform:uppercase"><div class="warn" id="w_cf"></div></div>
+      <div class="field"><label>Partita IVA</label><input id="c_piva" value="${esc(c.piva||'')}" oninput="checkCF()"><div class="warn" id="w_piva"></div></div>
+      ${f('ateco','Codice ATECO')}
+      <div class="field"><label>Periodicità IVA</label><select id="c_periodicitaIva">${sel({mensile:'Mensile',trimestrale:'Trimestrale'},c.periodicitaIva)}</select></div>
+    </div></fieldset>
+    <fieldset><legend>Sede e contatti</legend><div class="form-grid">
+      <div class="field full"><label>Indirizzo</label><input id="c_indirizzo" value="${esc(c.indirizzo||'')}"></div>
+      ${f('cap','CAP')}${f('comune','Comune')}${f('prov','Provincia','maxlength="2" style="text-transform:uppercase"')}
+      ${f('tel','Telefono')}${f('email','Email','type="email"')}${f('pec','PEC','type="email"')}
+      ${f('sdi','Codice destinatario SDI','maxlength="7"')}${f('referente','Referente')}
+    </div></fieldset>
+    <fieldset><legend>Incarico</legend><div class="form-grid">
+      ${f('inizioMandato','Inizio mandato','type="date"')}
+      ${f('onorario','Onorario annuo (€, imponibile)','type="number" step="0.01" min="0"')}
+      <div class="field"><label>Stato</label><select id="c_stato">${sel({attivo:'Attivo',cessato:'Cessato'},c.stato||'attivo')}</select></div>
+      <div class="field full"><label>Servizi affidati (determinano le scadenze generate)</label><div class="checks">
+        ${Object.entries(SERVIZI).map(([k,l])=>`<label><input type="checkbox" name="servizi" value="${k}" ${(c.servizi||[]).includes(k)?'checked':''}> ${esc(l)}</label>`).join('')}
+      </div></div>
+      <div class="field full"><label>Note</label><textarea id="c_note" rows="3">${esc(c.note||'')}</textarea></div>
+    </div></fieldset>
+    </div>`,
+    `${id?`<button class="btn btn-red" style="margin-right:auto" onclick="eliminaCliente('${id}')">Elimina</button>`:''}
+     <button class="btn btn-light" onclick="chiudiModal()">Annulla</button>
+     <button class="btn" onclick="salvaCliente('${id||''}')">Salva</button>`);
+  checkCF();
+}
+
+function checkCF(){
+  const cf=$('c_cf')?.value.trim(), piva=$('c_piva')?.value.trim();
+  if(!$('w_cf')) return;
+  $('w_cf').textContent = cf && !validaCF(cf) ? 'Codice fiscale non valido (verifica)' : '';
+  $('w_piva').textContent = piva && !validaPIVA(piva) ? 'Partita IVA non valida (verifica)' : '';
+}
+
+function salvaCliente(id){
+  const v=k=>$('c_'+k).value.trim();
+  const dati={
+    denominazione:v('denominazione'), tipo:v('tipo'), regime:v('regime'), cf:v('cf').toUpperCase(), piva:v('piva'),
+    ateco:v('ateco'), periodicitaIva:v('periodicitaIva'), indirizzo:v('indirizzo'), cap:v('cap'), comune:v('comune'),
+    prov:v('prov').toUpperCase(), tel:v('tel'), email:v('email'), pec:v('pec'), sdi:v('sdi').toUpperCase(), referente:v('referente'),
+    inizioMandato:v('inizioMandato'), onorario:Number(v('onorario'))||0, stato:v('stato'), note:$('c_note').value,
+    servizi:[...document.querySelectorAll('input[name=servizi]:checked')].map(x=>x.value)
+  };
+  if(!dati.denominazione){ toast('Inserisci la denominazione del cliente.','err'); return; }
+  const dup=clienti.find(c=>c.id!==id && ((dati.cf && c.cf===dati.cf) || (dati.piva && c.piva===dati.piva)));
+  if(dup && !confirm(`Esiste già un cliente con lo stesso CF/P.IVA (${dup.denominazione}). Salvare comunque?`)) return;
+  if(id){ Object.assign(clienti.find(c=>c.id===id), dati); }
+  else{
+    const nuovo={id:uid(), diario:[], ...dati}; clienti.push(nuovo);
+    if(nuovo.servizi.length && confirm('Generare subito le scadenze '+new Date().getFullYear()+' per questo cliente?')){
+      generaScadenze(new Date().getFullYear(), nuovo.id);
+    }
+  }
+  saveData(); chiudiModal(); renderAll(); toast('Cliente salvato.');
+}
+
+function eliminaCliente(id){
+  const c=clienti.find(x=>x.id===id);
+  const ns=scadenze.filter(s=>s.clienteId===id).length, np=parcelle.filter(p=>p.clienteId===id).length;
+  if(!confirm(`Eliminare definitivamente «${c.denominazione}»?\nVerranno eliminate anche ${ns} scadenze e ${np} parcelle.\n\nSuggerimento: per conservare lo storico imposta lo stato su «Cessato».`)) return;
+  clienti=clienti.filter(x=>x.id!==id);
+  scadenze=scadenze.filter(s=>s.clienteId!==id);
+  parcelle=parcelle.filter(p=>p.clienteId!==id);
+  saveData(); chiudiModal(); renderAll(); toast('Cliente eliminato.');
+}
+
+/* ----- Scheda cliente ----- */
+let schedaTab='scadenze';
+function apriSchedaCliente(id){
+  const c=clienti.find(x=>x.id===id); if(!c) return;
+  const r=(l,v)=>v?`<div><span>${l}</span>${esc(v)}</div>`:'';
+  const scad=scadenze.filter(s=>s.clienteId===id).sort((a,b)=>a.data.localeCompare(b.data));
+  const parc=parcelle.filter(p=>p.clienteId===id).sort((a,b)=>b.data.localeCompare(a.data));
+  const daInc=parc.filter(p=>!p.pagata).reduce((t,p)=>t+calcolaParcella(p).netto,0);
+
+  const corpoScad = scad.filter(s=>!s.fatta).length ? `<table><thead><tr><th>Data</th><th>Adempimento</th><th>Categoria</th><th></th></tr></thead><tbody>
+    ${scad.filter(s=>!s.fatta).map(s=>`<tr><td class="nowrap">${badgeData(s)}</td><td>${esc(s.descrizione)}</td><td><span class="badge ${CAT_BADGE[s.categoria]||'b-gray'}">${esc(CATEGORIE[s.categoria]||s.categoria)}</span></td>
+      <td><button class="btn btn-green btn-sm" onclick="toggleScadenza('${s.id}',true)">Fatto</button></td></tr>`).join('')}</tbody></table>`
+    : '<div class="empty">Nessuna scadenza aperta.</div>';
+  const corpoParc = parc.length ? `<table><thead><tr><th>N.</th><th>Data</th><th>Descrizione</th><th class="right">Netto</th><th>Stato</th></tr></thead><tbody>
+    ${parc.map(p=>`<tr><td>${esc(p.numero)}</td><td>${fmtData(p.data)}</td><td>${esc(p.descrizione)}</td><td class="right">${euro(calcolaParcella(p).netto)}</td>
+      <td>${p.pagata?'<span class="badge b-green">incassata</span>':'<span class="badge b-yellow">da incassare</span>'}</td></tr>`).join('')}</tbody></table>`
+    : '<div class="empty">Nessuna parcella.</div>';
+  const corpoDiario = `<div class="btn-row" style="margin-bottom:10px">
+      <input type="date" id="d_data" value="${oggi()}"><input id="d_testo" placeholder="Telefonata, incontro, documenti ricevuti…" style="flex:1;min-width:200px">
+      <button class="btn btn-sm" onclick="aggiungiDiario('${id}')">Aggiungi</button></div>
+    ${(c.diario||[]).length ? [...c.diario].sort((a,b)=>b.data.localeCompare(a.data)).map(d=>`<div class="diario-item"><span class="muted">${fmtData(d.data)}</span>
+      <button class="x" style="float:right;font-size:16px" title="Elimina" onclick="eliminaDiario('${id}','${d.id}')">×</button><div>${esc(d.testo)}</div></div>`).join('')
+      : '<div class="empty">Nessuna annotazione.</div>'}`;
+
+  apriModal(esc(c.denominazione), `
+    <div class="info-grid">
+      ${r('Tipologia',TIPI[c.tipo])}${r('Regime',REGIMI[c.regime]+(c.regime!=='forfettario'&&c.regime!=='nessuno'?' · IVA '+c.periodicitaIva:''))}
+      ${r('Codice fiscale',c.cf)}${r('Partita IVA',c.piva)}${r('ATECO',c.ateco)}
+      ${r('Indirizzo',[c.indirizzo,[c.cap,c.comune,c.prov&&'('+c.prov+')'].filter(Boolean).join(' ')].filter(Boolean).join(', '))}
+      ${r('Telefono',c.tel)}${r('Email',c.email)}${r('PEC',c.pec)}${r('Codice SDI',c.sdi)}${r('Referente',c.referente)}
+      ${r('Inizio mandato',fmtData(c.inizioMandato))}${r('Onorario annuo',c.onorario?euro(c.onorario):'')}
+      ${r('Servizi',(c.servizi||[]).map(s=>SERVIZI[s]).join(', '))}${r('Da incassare',daInc?euro(daInc):'')}
+    </div>
+    ${c.note?`<p style="white-space:pre-wrap;background:var(--slate-50);padding:10px;border-radius:6px">${esc(c.note)}</p>`:''}
+    <div class="sub-tabs">
+      ${[['scadenze','Scadenze aperte ('+scad.filter(s=>!s.fatta).length+')'],['parcelle','Parcelle ('+parc.length+')'],['diario','Diario contatti ('+(c.diario||[]).length+')']]
+        .map(([k,l])=>`<button class="${schedaTab===k?'active':''}" onclick="schedaTab='${k}';apriSchedaCliente('${id}')">${l}</button>`).join('')}
+    </div>
+    <div class="scroll-x">${schedaTab==='scadenze'?corpoScad:schedaTab==='parcelle'?corpoParc:corpoDiario}</div>`,
+    `<button class="btn btn-light" style="margin-right:auto" onclick="apriFormScadenza(null,'${id}')">+ Scadenza</button>
+     <button class="btn btn-light" onclick="apriFormParcella(null,'${id}')">+ Parcella</button>
+     <button class="btn" onclick="apriFormCliente('${id}')">Modifica anagrafica</button>`);
+}
+
+function aggiungiDiario(id){
+  const t=$('d_testo').value.trim(); if(!t) return;
+  const c=clienti.find(x=>x.id===id); (c.diario ||= []).push({id:uid(), data:$('d_data').value||oggi(), testo:t});
+  saveData(); apriSchedaCliente(id);
+}
+function eliminaDiario(id, did){
+  const c=clienti.find(x=>x.id===id); c.diario=c.diario.filter(d=>d.id!==did);
+  saveData(); apriSchedaCliente(id);
+}
+
+function esportaClientiCSV(){
+  const righe=[['Denominazione','Tipologia','Codice fiscale','Partita IVA','Regime','Periodicità IVA','ATECO','Indirizzo','CAP','Comune','Prov','Telefono','Email','PEC','SDI','Referente','Inizio mandato','Onorario annuo','Stato','Servizi','Note']];
+  clienti.forEach(c=>righe.push([c.denominazione,TIPI[c.tipo],c.cf,c.piva,REGIMI[c.regime],c.periodicitaIva,c.ateco,c.indirizzo,c.cap,c.comune,c.prov,c.tel,c.email,c.pec,c.sdi,c.referente,
+    fmtData(c.inizioMandato),String(c.onorario||0).replace('.',','),c.stato,(c.servizi||[]).map(s=>SERVIZI[s]).join(', '),c.note]));
+  download(toCSV(righe),'clienti_'+oggi()+'.csv','text/csv;charset=utf-8');
+}
+
+/* ======================= SCADENZE ======================= */
+function renderScadenze(){
+  const cli=$('fScadCliente').value, per=$('fScadPeriodo').value, cat=$('fScadCat').value, anno=$('fScadAnno').value;
+  const meseOra=oggi().slice(0,7);
+  const lista=scadenze.filter(s=>{
+    if(cli && s.clienteId!==cli) return false;
+    if(cat && s.categoria!==cat) return false;
+    if(anno && !s.data.startsWith(anno)) return false;
+    const g=giorniDa(s.data);
+    switch(per){
+      case 'aperte': return !s.fatta;
+      case 'scadute': return !s.fatta && g<0;
+      case '30': return !s.fatta && g>=0 && g<=30;
+      case 'mese': return s.data.startsWith(meseOra);
+      case 'fatte': return s.fatta;
+      default: return true;
+    }
+  }).sort((a,b)=>a.data.localeCompare(b.data) || nomeCliente(a.clienteId).localeCompare(nomeCliente(b.clienteId)));
+
+  if(!lista.length){ $('tabScadenze').innerHTML='<div class="empty">Nessuna scadenza con questi filtri. Usa «Genera scadenze dell\'anno» per creare automaticamente lo scadenzario dai servizi affidati.</div>'; return; }
+  $('tabScadenze').innerHTML=`<table><thead><tr><th></th><th>Data</th><th>Cliente</th><th>Adempimento</th><th>Categoria</th><th>Note</th><th></th></tr></thead><tbody>
+  ${lista.map(s=>`<tr class="${s.fatta?'done':''}">
+    <td><input type="checkbox" ${s.fatta?'checked':''} onchange="toggleScadenza('${s.id}')" title="Segna come svolta"></td>
+    <td class="nowrap">${badgeData(s)}</td>
+    <td><a class="lnk" onclick="apriSchedaCliente('${s.clienteId}')">${esc(nomeCliente(s.clienteId))}</a></td>
+    <td class="desc">${esc(s.descrizione)}</td>
+    <td><span class="badge ${CAT_BADGE[s.categoria]||'b-gray'}">${esc(CATEGORIE[s.categoria]||s.categoria)}</span></td>
+    <td class="muted">${esc(s.note||'')}${s.fatta&&s.dataFatta?' <span class="muted">(svolta il '+fmtData(s.dataFatta)+')</span>':''}</td>
+    <td class="nowrap right"><button class="btn btn-light btn-sm" onclick="apriFormScadenza('${s.id}')">Modifica</button></td>
+  </tr>`).join('')}</tbody></table>
+  <p class="muted" style="margin-top:8px">${lista.length} scadenze visualizzate</p>`;
+}
+
+function toggleScadenza(id, riapriScheda){
+  const s=scadenze.find(x=>x.id===id); s.fatta=!s.fatta; s.dataFatta = s.fatta ? oggi() : '';
+  saveData(); renderAll();
+  if(riapriScheda) apriSchedaCliente(s.clienteId);
+}
+
+function apriFormScadenza(id, clienteId){
+  const s = id ? scadenze.find(x=>x.id===id) : {clienteId:clienteId||'', data:oggi(), categoria:'altro', descrizione:'', note:''};
+  if(!clienti.length){ toast('Inserisci prima almeno un cliente.','err'); return; }
+  apriModal(id?'Modifica scadenza':'Nuova scadenza', `<div class="form-grid">
+    <div class="field full"><label>Cliente *</label><select id="s_cliente">${[...clienti].sort((a,b)=>a.denominazione.localeCompare(b.denominazione))
+      .map(c=>`<option value="${c.id}" ${c.id===s.clienteId?'selected':''}>${esc(c.denominazione)}</option>`).join('')}</select></div>
+    <div class="field"><label>Data *</label><input type="date" id="s_data" value="${esc(s.data)}"></div>
+    <div class="field"><label>Categoria</label><select id="s_cat">${Object.entries(CATEGORIE).map(([k,l])=>`<option value="${k}" ${k===s.categoria?'selected':''}>${l}</option>`).join('')}</select></div>
+    <div class="field full"><label>Adempimento *</label><input id="s_descr" value="${esc(s.descrizione)}"></div>
+    <div class="field full"><label>Note</label><input id="s_note" value="${esc(s.note||'')}"></div>
+  </div>`,
+  `${id?`<button class="btn btn-red" style="margin-right:auto" onclick="eliminaScadenza('${id}')">Elimina</button>`:''}
+   <button class="btn btn-light" onclick="chiudiModal()">Annulla</button><button class="btn" onclick="salvaScadenza('${id||''}')">Salva</button>`);
+}
+function salvaScadenza(id){
+  const dati={clienteId:$('s_cliente').value, data:$('s_data').value, categoria:$('s_cat').value, descrizione:$('s_descr').value.trim(), note:$('s_note').value.trim()};
+  if(!dati.data || !dati.descrizione){ toast('Data e adempimento sono obbligatori.','err'); return; }
+  if(id) Object.assign(scadenze.find(x=>x.id===id), dati);
+  else scadenze.push({id:uid(), fatta:false, ...dati});
+  saveData(); chiudiModal(); renderAll(); toast('Scadenza salvata.');
+}
+function eliminaScadenza(id){
+  if(!confirm('Eliminare questa scadenza?')) return;
+  scadenze=scadenze.filter(s=>s.id!==id); saveData(); chiudiModal(); renderAll();
+}
+
+function apriGeneraScadenze(){
+  const Y=new Date().getFullYear();
+  apriModal('Genera scadenze dell\'anno', `
+    <p style="margin-bottom:12px">Crea lo scadenzario in base ai <b>servizi affidati</b>, alla tipologia, al regime e alla periodicità IVA di ciascun cliente.
+    Le scadenze già presenti non vengono duplicate.</p>
+    <div class="form-grid">
+      <div class="field"><label>Anno</label><select id="g_anno">${[Y-1,Y,Y+1].map(y=>`<option ${y===Y?'selected':''}>${y}</option>`).join('')}</select></div>
+      <div class="field"><label>Clienti</label><select id="g_cli"><option value="">Tutti i clienti attivi</option>
+        ${[...clienti].filter(c=>c.stato!=='cessato').sort((a,b)=>a.denominazione.localeCompare(b.denominazione)).map(c=>`<option value="${c.id}">${esc(c.denominazione)}</option>`).join('')}</select></div>
+    </div>`,
+    `<button class="btn btn-light" onclick="chiudiModal()">Annulla</button>
+     <button class="btn btn-green" onclick="eseguiGenera()">Genera</button>`);
+}
+function eseguiGenera(){
+  const n=generaScadenze(Number($('g_anno').value), $('g_cli').value);
+  saveData(); chiudiModal(); renderAll(); toast(n ? `Create ${n} nuove scadenze.` : 'Nessuna nuova scadenza da creare.');
+}
+
+/* ======================= PARCELLE ======================= */
+function renderParcelle(){
+  const cli=$('fParCliente').value, anno=$('fParAnno').value, st=$('fParStato').value;
+  const lista=parcelle.filter(p=>(!cli||p.clienteId===cli) && (!anno||p.data.startsWith(anno)) && (!st || (st==='pagata')===!!p.pagata))
+    .sort((a,b)=>b.data.localeCompare(a.data) || (parseInt(b.numero)||0)-(parseInt(a.numero)||0));
+  const tot={imp:0,totale:0,ritenuta:0,netto:0,incassato:0,aperto:0};
+  lista.forEach(p=>{const k=calcolaParcella(p); tot.imp+=k.imp; tot.totale+=k.totale; tot.ritenuta+=k.ritenuta; tot.netto+=k.netto; p.pagata?tot.incassato+=k.netto:tot.aperto+=k.netto;});
+
+  $('kpiParcelle').innerHTML=`
+    <div class="kpi"><div class="lbl">Onorari (imponibile)</div><div class="val">${euro(tot.imp)}</div></div>
+    <div class="kpi purple"><div class="lbl">Totale documenti</div><div class="val">${euro(tot.totale)}</div></div>
+    <div class="kpi green"><div class="lbl">Incassato (netto)</div><div class="val">${euro(tot.incassato)}</div></div>
+    <div class="kpi red"><div class="lbl">Da incassare (netto)</div><div class="val">${euro(tot.aperto)}</div></div>`;
+
+  if(!lista.length){ $('tabParcelle').innerHTML='<div class="empty">Nessuna parcella con questi filtri.</div>'; return; }
+  $('tabParcelle').innerHTML=`<table><thead><tr><th>N.</th><th>Data</th><th>Cliente</th><th>Descrizione</th><th class="right">Imponibile</th><th class="right">Totale</th><th class="right">Ritenuta</th><th class="right">Netto a pagare</th><th>Stato</th><th></th></tr></thead><tbody>
+  ${lista.map(p=>{const k=calcolaParcella(p); return `<tr>
+    <td>${esc(p.numero)}</td><td class="nowrap">${fmtData(p.data)}</td>
+    <td><a class="lnk" onclick="apriSchedaCliente('${p.clienteId}')">${esc(nomeCliente(p.clienteId))}</a></td>
+    <td>${esc(p.descrizione)}</td><td class="right nowrap">${euro(k.imp)}</td><td class="right nowrap">${euro(k.totale)}</td>
+    <td class="right nowrap">${k.ritenuta?euro(k.ritenuta):'—'}</td><td class="right nowrap bold">${euro(k.netto)}</td>
+    <td>${p.pagata?`<span class="badge b-green">incassata ${fmtData(p.dataIncasso)}</span>`:`<button class="btn btn-green btn-sm" onclick="segnaIncassata('${p.id}')">Incassa</button>`}</td>
+    <td class="nowrap right"><button class="btn btn-light btn-sm" onclick="stampaParcella('${p.id}')">Stampa</button>
+      <button class="btn btn-light btn-sm" onclick="apriFormParcella('${p.id}')">Modifica</button></td></tr>`;}).join('')}
+  </tbody><tfoot><tr><td colspan="4">Totale (${lista.length})</td><td class="right nowrap">${euro(tot.imp)}</td><td class="right nowrap">${euro(tot.totale)}</td>
+    <td class="right nowrap">${euro(tot.ritenuta)}</td><td class="right nowrap">${euro(tot.netto)}</td><td colspan="2"></td></tr></tfoot></table>`;
+}
+
+function segnaIncassata(id){
+  const p=parcelle.find(x=>x.id===id); p.pagata=true; p.dataIncasso=oggi();
+  saveData(); renderAll(); toast('Parcella segnata come incassata.');
+}
+
+function apriFormParcella(id, clienteId){
+  if(!clienti.length){ toast('Inserisci prima almeno un cliente.','err'); return; }
+  const anno=new Date().getFullYear();
+  const cli0=clienti.find(c=>c.id===clienteId);
+  const p = id ? parcelle.find(x=>x.id===id) : {numero:String(prossimoNumero(String(anno))), data:oggi(), clienteId:clienteId||'', descrizione:'Compensi professionali',
+    imponibile:'', speseEscluse:0, cassaPerc:impost.cassa, ivaPerc:impost.iva, ritenuta:sostitutoImposta(cli0), ritenutaPerc:impost.rit, pagata:false, dataIncasso:''};
+  apriModal(id?'Modifica parcella':'Nuova parcella', `<div class="form-grid">
+    <div class="field"><label>Numero *</label><input id="p_numero" value="${esc(p.numero)}"></div>
+    <div class="field"><label>Data *</label><input type="date" id="p_data" value="${esc(p.data)}"></div>
+    <div class="field full"><label>Cliente *</label><select id="p_cliente" onchange="aggiornaRitenutaDefault()">${!p.clienteId?'<option value="">— seleziona —</option>':''}${[...clienti].sort((a,b)=>a.denominazione.localeCompare(b.denominazione))
+      .map(c=>`<option value="${c.id}" ${c.id===p.clienteId?'selected':''}>${esc(c.denominazione)}</option>`).join('')}</select></div>
+    <div class="field full"><label>Descrizione prestazione</label><input id="p_descr" value="${esc(p.descrizione)}"></div>
+    <div class="field"><label>Onorario imponibile (€) *</label><input type="number" step="0.01" id="p_imp" value="${esc(p.imponibile)}" oninput="anteprimaParcella()"></div>
+    <div class="field"><label>Cassa previdenza (%)</label><input type="number" step="0.01" id="p_cassa" value="${esc(p.cassaPerc)}" oninput="anteprimaParcella()"></div>
+    <div class="field"><label>IVA (%)</label><input type="number" step="0.01" id="p_iva" value="${esc(p.ivaPerc)}" oninput="anteprimaParcella()"></div>
+    <div class="field"><label>Spese escluse art. 15 (€)</label><input type="number" step="0.01" id="p_spese" value="${esc(p.speseEscluse||0)}" oninput="anteprimaParcella()"></div>
+    <div class="field"><label><input type="checkbox" id="p_rit" ${p.ritenuta?'checked':''} onchange="anteprimaParcella()"> Ritenuta d'acconto (%)</label>
+      <input type="number" step="0.01" id="p_ritp" value="${esc(p.ritenutaPerc)}" oninput="anteprimaParcella()"></div>
+    <div class="field"><label><input type="checkbox" id="p_pagata" ${p.pagata?'checked':''}> Incassata il</label><input type="date" id="p_dinc" value="${esc(p.dataIncasso||'')}"></div>
+    <div class="field full" id="p_anteprima"></div>
+  </div>`,
+  `${id?`<button class="btn btn-red" style="margin-right:auto" onclick="eliminaParcella('${id}')">Elimina</button>`:''}
+   <button class="btn btn-light" onclick="chiudiModal()">Annulla</button><button class="btn" onclick="salvaParcella('${id||''}')">Salva</button>`);
+  anteprimaParcella();
+}
+function aggiornaRitenutaDefault(){
+  $('p_rit').checked = sostitutoImposta(clienti.find(c=>c.id===$('p_cliente').value));
+  const c=clienti.find(c=>c.id===$('p_cliente').value);
+  if(c && !$('p_imp').value && c.onorario) $('p_imp').value = round2(c.onorario/(Number(impost.rate)||1));
+  anteprimaParcella();
+}
+function leggiFormParcella(){
+  return {numero:$('p_numero').value.trim(), data:$('p_data').value, clienteId:$('p_cliente').value, descrizione:$('p_descr').value.trim(),
+    imponibile:Number($('p_imp').value)||0, cassaPerc:Number($('p_cassa').value)||0, ivaPerc:Number($('p_iva').value)||0, speseEscluse:Number($('p_spese').value)||0,
+    ritenuta:$('p_rit').checked, ritenutaPerc:Number($('p_ritp').value)||0, pagata:$('p_pagata').checked, dataIncasso:$('p_dinc').value};
+}
+function anteprimaParcella(){
+  const k=calcolaParcella(leggiFormParcella());
+  $('p_anteprima').innerHTML=`<table style="max-width:420px;margin-left:auto">
+    <tr><td>Onorario</td><td class="right">${euro(k.imp)}</td></tr>
+    <tr><td>Contributo integrativo</td><td class="right">${euro(k.cassa)}</td></tr>
+    <tr><td>IVA</td><td class="right">${euro(k.iva)}</td></tr>
+    ${k.spese?`<tr><td>Spese escluse art. 15</td><td class="right">${euro(k.spese)}</td></tr>`:''}
+    <tr><td class="bold">Totale documento</td><td class="right bold">${euro(k.totale)}</td></tr>
+    ${k.ritenuta?`<tr><td>Ritenuta d'acconto</td><td class="right">− ${euro(k.ritenuta)}</td></tr>`:''}
+    <tr><td class="bold">Netto a pagare</td><td class="right bold">${euro(k.netto)}</td></tr></table>`;
+}
+function salvaParcella(id){
+  const d=leggiFormParcella();
+  if(!d.numero || !d.data || !d.clienteId || !d.imponibile){ toast('Numero, data, cliente e onorario sono obbligatori.','err'); return; }
+  if(d.pagata && !d.dataIncasso) d.dataIncasso=oggi();
+  if(!d.pagata) d.dataIncasso='';
+  const dup=parcelle.find(p=>p.id!==id && p.numero===d.numero && p.data.slice(0,4)===d.data.slice(0,4));
+  if(dup && !confirm(`Esiste già la parcella n. ${d.numero} del ${d.data.slice(0,4)}. Salvare comunque?`)) return;
+  if(id) Object.assign(parcelle.find(x=>x.id===id), d); else parcelle.push({id:uid(), ...d});
+  saveData(); chiudiModal(); renderAll(); toast('Parcella salvata.');
+}
+function eliminaParcella(id){
+  if(!confirm('Eliminare questa parcella?')) return;
+  parcelle=parcelle.filter(p=>p.id!==id); saveData(); chiudiModal(); renderAll();
+}
+
+function generaParcelleOnorari(){
+  const rate=Number(impost.rate)||1;
+  const attivi=clienti.filter(c=>c.stato!=='cessato' && Number(c.onorario)>0);
+  if(!attivi.length){ toast('Nessun cliente attivo con onorario annuo impostato.','err'); return; }
+  const per = rate===1?'anno':rate===2?'semestre':rate===4?'trimestre':'mese';
+  const d=new Date(), Y=d.getFullYear();
+  const periodo = rate===1?String(Y):rate===12?MESI[d.getMonth()]+' '+Y:(Math.floor(d.getMonth()/(12/rate))+1)+'° '+per+' '+Y;
+  if(!confirm(`Creare ${attivi.length} parcelle (onorario annuo ÷ ${rate}) per il periodo «${periodo}»?\nLe parcelle già create per lo stesso periodo verranno saltate.`)) return;
+  let n=prossimoNumero(String(Y)), creati=0;
+  attivi.forEach(c=>{
+    const descr='Compensi professionali – '+periodo;
+    if(parcelle.some(p=>p.clienteId===c.id && p.descrizione===descr)) return;
+    parcelle.push({id:uid(), numero:String(n++), data:oggi(), clienteId:c.id, descrizione:descr, imponibile:round2(c.onorario/rate), speseEscluse:0,
+      cassaPerc:impost.cassa, ivaPerc:impost.iva, ritenuta:sostitutoImposta(c), ritenutaPerc:impost.rit, pagata:false, dataIncasso:''});
+    creati++;
+  });
+  saveData(); renderAll(); toast(creati?`Create ${creati} parcelle.`:'Nessuna nuova parcella da creare.');
+}
+
+function stampaParcella(id){
+  const p=parcelle.find(x=>x.id===id), c=clienti.find(x=>x.id===p.clienteId)||{}, k=calcolaParcella(p);
+  $('printArea').innerHTML=`
+    <div style="display:flex;justify-content:space-between;gap:20px;margin-bottom:30px">
+      <div><h2 style="font-size:18px">${esc(impost.nome)}</h2><div style="white-space:pre-wrap">${esc(impost.intest)}</div></div>
+      <div style="text-align:right"><b>Spett.le</b><br>${esc(c.denominazione||'')}<br>${esc(c.indirizzo||'')}<br>${esc([c.cap,c.comune,c.prov&&'('+c.prov+')'].filter(Boolean).join(' '))}
+        <br>${c.piva?'P.IVA '+esc(c.piva)+'<br>':''}${c.cf?'C.F. '+esc(c.cf):''}</div>
+    </div>
+    <h3 style="margin-bottom:12px">Avviso di parcella n. ${esc(p.numero)} del ${fmtData(p.data)}</h3>
+    <table style="margin-bottom:20px"><thead><tr><th>Descrizione</th><th class="right">Importo</th></tr></thead><tbody>
+      <tr><td>${esc(p.descrizione)}</td><td class="right">${euro(k.imp)}</td></tr>
+      <tr><td>Contributo integrativo ${p.cassaPerc}%</td><td class="right">${euro(k.cassa)}</td></tr>
+      <tr><td>IVA ${p.ivaPerc}%</td><td class="right">${euro(k.iva)}</td></tr>
+      ${k.spese?`<tr><td>Spese anticipate escluse art. 15 DPR 633/72</td><td class="right">${euro(k.spese)}</td></tr>`:''}
+      <tr><td class="bold">Totale documento</td><td class="right bold">${euro(k.totale)}</td></tr>
+      ${k.ritenuta?`<tr><td>Ritenuta d'acconto ${p.ritenutaPerc}%</td><td class="right">− ${euro(k.ritenuta)}</td></tr>`:''}
+      <tr><td class="bold">Netto a pagare</td><td class="right bold">${euro(k.netto)}</td></tr>
+    </tbody></table>
+    <p style="font-size:11px;color:#555">Documento non valido ai fini fiscali. La fattura elettronica sarà emessa tramite SDI al momento del pagamento.</p>`;
+  window.print();
+}
+
+function esportaParcelleCSV(){
+  const righe=[['Numero','Data','Cliente','Descrizione','Imponibile','Cassa','IVA','Spese escluse','Totale','Ritenuta','Netto','Incassata','Data incasso']];
+  const n=v=>String(v).replace('.',',');
+  [...parcelle].sort((a,b)=>a.data.localeCompare(b.data)).forEach(p=>{const k=calcolaParcella(p);
+    righe.push([p.numero,fmtData(p.data),nomeCliente(p.clienteId),p.descrizione,n(k.imp),n(k.cassa),n(k.iva),n(k.spese),n(k.totale),n(k.ritenuta),n(k.netto),p.pagata?'Sì':'No',fmtData(p.dataIncasso)]);});
+  download(toCSV(righe),'parcelle_'+oggi()+'.csv','text/csv;charset=utf-8');
+}
+
+/* ======================= IMPOSTAZIONI / BACKUP ======================= */
+function renderImpostazioni(){
+  $('impNome').value=impost.nome; $('impIntest').value=impost.intest;
+  $('impCassa').value=impost.cassa; $('impIva').value=impost.iva; $('impRit').value=impost.rit; $('impRate').value=impost.rate;
+}
+function salvaImpostazioni(){
+  impost={nome:$('impNome').value.trim()||'Studio Commerciale', intest:$('impIntest').value, cassa:Number($('impCassa').value)||0,
+    iva:Number($('impIva').value)||0, rit:Number($('impRit').value)||0, rate:Number($('impRate').value)||1};
+  saveData(); renderAll(); toast('Impostazioni salvate.');
+}
+function esportaBackup(){
+  const dati={app:'studio-clienti', versione:1, esportatoIl:new Date().toISOString(), clienti, scadenze, parcelle, impostazioni:impost};
+  download(JSON.stringify(dati,null,2),'backup_studio_'+oggi()+'.json','application/json');
+}
+function importaBackup(ev){
+  const f=ev.target.files[0]; if(!f) return;
+  const r=new FileReader();
+  r.onload=e=>{
+    try{
+      const d=JSON.parse(e.target.result);
+      if(d.app!=='studio-clienti' || !Array.isArray(d.clienti)) throw new Error('formato');
+      if(!confirm(`Il backup contiene ${d.clienti.length} clienti. I dati attuali verranno sostituiti. Continuare?`)) return;
+      clienti=d.clienti; scadenze=d.scadenze||[]; parcelle=d.parcelle||[]; impost=Object.assign(impost, d.impostazioni||{});
+      saveData(); renderAll(); renderImpostazioni(); toast('Dati ripristinati.');
+    }catch(err){ toast('File non valido: usa un backup esportato da questo programma.','err'); }
+    finally{ $('fileImport').value=''; }
+  };
+  r.readAsText(f);
+}
+function cancellaTutto(){
+  if(!confirm('Cancellare TUTTI i clienti, le scadenze e le parcelle? Operazione irreversibile: scarica prima un backup.')) return;
+  if(prompt('Per confermare scrivi CANCELLA')!=='CANCELLA') return;
+  clienti=[]; scadenze=[]; parcelle=[]; saveData(); renderAll(); toast('Tutti i dati sono stati cancellati.');
+}
+function caricaEsempio(){
+  if(clienti.length && !confirm('Aggiungere i clienti di esempio a quelli esistenti?')) return;
+  const Y=new Date().getFullYear();
+  const es=[
+    {denominazione:'Rossi Mario', tipo:'ditta', regime:'semplificato', cf:'RSSMRA80A01H501U', piva:'12345678903', ateco:'43.21.01', periodicitaIva:'trimestrale',
+      indirizzo:'Via Roma 10', cap:'00100', comune:'Roma', prov:'RM', tel:'333 1234567', email:'mario.rossi@example.it', onorario:1800, servizi:['contabilita','iva','redditi','imu']},
+    {denominazione:'Alfa Costruzioni S.r.l.', tipo:'sdc', regime:'ordinario', cf:'01234567897', piva:'01234567897', ateco:'41.20.00', periodicitaIva:'mensile',
+      indirizzo:'Viale Europa 55', cap:'20100', comune:'Milano', prov:'MI', pec:'alfacostruzioni@pec.example.it', sdi:'M5UXCR1', referente:'Ing. Bianchi', onorario:6000,
+      servizi:['contabilita','iva','redditi','paghe','bilancio']},
+    {denominazione:'Verdi Laura', tipo:'prof', regime:'forfettario', cf:'VRDLRA85M41F205S', piva:'09876543217', ateco:'74.10.29', periodicitaIva:'trimestrale',
+      indirizzo:'Corso Italia 3', cap:'50100', comune:'Firenze', prov:'FI', tel:'347 7654321', email:'laura.verdi@example.it', onorario:900, servizi:['contabilita','redditi']},
+    {denominazione:'Bianchi Giuseppe', tipo:'pf', regime:'nessuno', cf:'BNCGPP60C15L219K', comune:'Torino', prov:'TO', tel:'011 223344', onorario:150, servizi:['dich730','imu']}
+  ];
+  es.forEach(e=>{ const c={id:uid(), stato:'attivo', inizioMandato:Y+'-01-01', diario:[], ...e}; clienti.push(c); generaScadenze(Y,c.id); });
+  // negli esempi le scadenze già passate risultano svolte, tranne un paio lasciate aperte per mostrare gli avvisi
+  const passate=scadenze.filter(x=>es.some(e=>e.denominazione===nomeCliente(x.clienteId)) && giorniDa(x.data)<0).sort((a,b)=>a.data.localeCompare(b.data));
+  passate.slice(0,-2).forEach(x=>{ x.fatta=true; x.dataFatta=x.data; });
+  const r=clienti.find(c=>c.denominazione==='Rossi Mario');
+  parcelle.push({id:uid(), numero:String(prossimoNumero(String(Y))), data:Y+'-01-31', clienteId:r.id, descrizione:'Compensi professionali – '+Y, imponibile:1800, speseEscluse:0,
+    cassaPerc:impost.cassa, ivaPerc:impost.iva, ritenuta:true, ritenutaPerc:impost.rit, pagata:false, dataIncasso:''});
+  saveData(); renderAll(); toast('Dati di esempio caricati.');
+}
+
+/* ======================= MODAL ======================= */
+function apriModal(titolo, corpo, piede){
+  $('modalRoot').innerHTML=`<div class="modal-bg" onmousedown="if(event.target===this)chiudiModal()">
+    <div class="modal" role="dialog" aria-modal="true"><div class="modal-head"><h3>${titolo}</h3><button class="x" onclick="chiudiModal()" aria-label="Chiudi">×</button></div>
+    <div class="modal-body">${corpo}</div><div class="modal-foot">${piede||''}</div></div></div>`;
+  const first=$('modalRoot').querySelector('.modal-body input:not([type=checkbox]),.modal-body select');
+  if(first && !first.value) first.focus();
+}
+function chiudiModal(){ $('modalRoot').innerHTML=''; }
+document.addEventListener('keydown',e=>{ if(e.key==='Escape') chiudiModal(); });
+
+window.onload=renderAll;
+</script>
+</body>
+</html>
